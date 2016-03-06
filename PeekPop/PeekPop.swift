@@ -12,25 +12,45 @@ public class PeekPop {
     
     var viewController: UIViewController
     
+    private var previewingContexts = [PreviewingContext]()
+    
     public init(viewController: UIViewController) {
         self.viewController = viewController
     }
     
     // Registers a view controller to participate with 3D Touch preview (peek) and commit (pop).
     public func registerForPreviewingWithDelegate(delegate: PeekPopPreviewingDelegate, sourceView: UIView) -> PreviewingContext {
-        return PreviewingContext(delegate: delegate, sourceView: sourceView, sourceRect: sourceView.frame)
+        let previewing = PreviewingContext(delegate: delegate, sourceView: sourceView, sourceRect: sourceView.frame)
+        previewingContexts.append(previewing)
+        let gestureRecognizer = PeekPopGestureRecognizer(target: self, action: "didPop")
+        gestureRecognizer.traitCollection = viewController.traitCollection
+        gestureRecognizer.sourceView = sourceView
+        viewController.view.addGestureRecognizer(gestureRecognizer)
+        return previewing
     }
     
     // Unregisters a view controller to participate with 3D Touch preview (peek) and commit (pop).
     public func unregisterForPreviewingWithContext(previewing: PreviewingContext) {
+        if let contextIndex = previewingContexts.indexOf(previewing) {
+            previewingContexts.removeAtIndex(contextIndex)
+        }
     }
-
+    
+    public func animatePeekPop(progress: Double) {
+        print("force \(progress)")
+    }
+    
 }
 
 public struct PreviewingContext {
     public let delegate: PeekPopPreviewingDelegate
     public let sourceView: UIView
     public let sourceRect: CGRect
+}
+
+extension PreviewingContext: Equatable {}
+public func ==(lhs: PreviewingContext, rhs: PreviewingContext) -> Bool {
+    return lhs.sourceView == rhs.sourceView
 }
 
 
