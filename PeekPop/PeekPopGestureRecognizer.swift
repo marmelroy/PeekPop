@@ -13,8 +13,7 @@ class PeekPopGestureRecognizer: UIGestureRecognizer
 {
     
     let timerLowerThreshold = 0.4
-    let timerMaxThreshold = 4.5
-    
+    let timerMaxThreshold = 4.0
     
     var target: PeekPop?
     var forceValue: Double = 0.0
@@ -75,11 +74,11 @@ class PeekPopGestureRecognizer: UIGestureRecognizer
     }
     
     func testMajorRadiusChange(majorRadius: CGFloat) {
-        guard let initialMajorRadius = initialMajorRadius, targetValue = target?.thresholds[1] else {
+        guard let initialMajorRadius = initialMajorRadius, firstThreshold = target?.thresholds.first,  targetValue = target?.thresholds[1] else {
             return
         }
         if initialMajorRadius/majorRadius < 0.9  {
-            if forceValue < targetValue {
+            if forceValue < targetValue && forceValue > firstThreshold {
                 forceValue = targetValue
             }
         }
