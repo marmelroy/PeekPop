@@ -95,14 +95,13 @@ class PeekPopGestureRecognizer: UIGestureRecognizer
     func longPress() {
         let timerValue = timerStart?.timeIntervalSinceNow ?? 0.0
         let timeInterval = abs(timerValue)
-        var forceValue = 0.0
         if timeInterval > timerLowerThreshold {
-            forceValue = (timeInterval-timerLowerThreshold)/(timerMaxThreshold-timerLowerThreshold)
+            var forceValue = (timeInterval-timerLowerThreshold)/(timerMaxThreshold-timerLowerThreshold)
             if timeInterval > timerMaxThreshold {
                 forceValue = 1.0
             }
+            handleForce(forceValue)
         }
-        handleForce(forceValue)
     }
     
     private func handleForce(force: Double)
