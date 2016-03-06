@@ -36,8 +36,12 @@ public class PeekPop {
         }
     }
     
-    public func animatePeekPop(progress: Double) {
+    func peekPopAnimate(progress: Double) {
         print("force \(progress)")
+    }
+    
+    func peekPopRelease() {
+        print("release")
     }
     
 }

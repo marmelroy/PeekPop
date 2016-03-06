@@ -12,10 +12,11 @@ import UIKit.UIGestureRecognizerSubclass
 class PeekPopGestureRecognizer: UIGestureRecognizer
 {
     
-    let timerLowerThreshold = 0.3
+    let timerLowerThreshold = 0.4
     let timerMaxThreshold = 2.5
     
     var target: PeekPop?
+    var forceValue: Double = 0.0
     
     var timer: NSTimer?
     var timerStart: NSDate?
@@ -78,6 +79,10 @@ class PeekPopGestureRecognizer: UIGestureRecognizer
     }
     
     private func invalidateTimers() {
+        if forceValue != 0.0 {
+            forceValue = 0.0
+            target?.peekPopRelease()
+        }
         timer?.invalidate()
         timer = nil
         timerStart = nil
@@ -101,11 +106,11 @@ class PeekPopGestureRecognizer: UIGestureRecognizer
         let timerValue = timerStart?.timeIntervalSinceNow ?? 0.0
         let timeInterval = abs(timerValue)
         if timeInterval > timerLowerThreshold {
-            var forceValue = (timeInterval-timerLowerThreshold)/(timerMaxThreshold-timerLowerThreshold)
+            var force = (timeInterval-timerLowerThreshold)/(timerMaxThreshold-timerLowerThreshold)
             if timeInterval > timerMaxThreshold {
-                forceValue = 1.0
+                force = 1.0
             }
-            handleForce(forceValue)
+            handleForce(force)
         }
     }
     
@@ -114,7 +119,8 @@ class PeekPopGestureRecognizer: UIGestureRecognizer
         if force == 0 {
             return
         }
-        target?.animatePeekPop(force)
+        self.forceValue = force
+        target?.peekPopAnimate(force)
     }
 
 }
