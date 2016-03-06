@@ -10,6 +10,7 @@
 		3453ABAB1C7C3B24002768E2 /* PeekPop.h in Headers */ = {isa = PBXBuildFile; fileRef = 3453ABAA1C7C3B24002768E2 /* PeekPop.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		3453ABB21C7C3B24002768E2 /* PeekPop.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3453ABA71C7C3B24002768E2 /* PeekPop.framework */; };
 		3453ABB71C7C3B24002768E2 /* PeekPopTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3453ABB61C7C3B24002768E2 /* PeekPopTests.swift */; };
+		34800C201C8C32D8009929FA /* PeekPop.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34800C1F1C8C32D8009929FA /* PeekPop.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -29,6 +30,7 @@
 		3453ABB11C7C3B24002768E2 /* PeekPopTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PeekPopTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		3453ABB61C7C3B24002768E2 /* PeekPopTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PeekPopTests.swift; sourceTree = "<group>"; };
 		3453ABB81C7C3B24002768E2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		34800C1F1C8C32D8009929FA /* PeekPop.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PeekPop.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -73,6 +75,7 @@
 			children = (
 				3453ABAA1C7C3B24002768E2 /* PeekPop.h */,
 				3453ABAC1C7C3B24002768E2 /* Info.plist */,
+				34800C1F1C8C32D8009929FA /* PeekPop.swift */,
 			);
 			path = PeekPop;
 			sourceTree = "<group>";
@@ -194,6 +197,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				34800C201C8C32D8009929FA /* PeekPop.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -308,28 +312,33 @@
 		3453ABBC1C7C3B24002768E2 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = PeekPop/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.roymarmelstein.PeekPop;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;
 		};
 		3453ABBD1C7C3B24002768E2 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = PeekPop/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.roymarmelstein.PeekPop;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -376,6 +385,7 @@
 				3453ABBD1C7C3B24002768E2 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		3453ABBE1C7C3B24002768E2 /* Build configuration list for PBXNativeTarget "PeekPopTests" */ = {
 			isa = XCConfigurationList;
@@ -384,6 +394,7 @@
 				3453ABC01C7C3B24002768E2 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

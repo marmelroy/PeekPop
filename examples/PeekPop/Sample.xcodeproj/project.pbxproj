@@ -13,6 +13,8 @@
 		34800BF91C8C3210009929FA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 34800BF81C8C3210009929FA /* Assets.xcassets */; };
 		34800BFC1C8C3210009929FA /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 34800BFA1C8C3210009929FA /* LaunchScreen.storyboard */; };
 		34800C071C8C3210009929FA /* SampleTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34800C061C8C3210009929FA /* SampleTests.swift */; };
+		34800C1A1C8C326F009929FA /* PeekPop.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 34800C171C8C3263009929FA /* PeekPop.framework */; };
+		34800C1B1C8C326F009929FA /* PeekPop.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 34800C171C8C3263009929FA /* PeekPop.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -23,7 +25,42 @@
 			remoteGlobalIDString = 34800BED1C8C3210009929FA;
 			remoteInfo = Sample;
 		};
+		34800C161C8C3263009929FA /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 34800C111C8C3263009929FA /* PeekPop.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 3453ABA71C7C3B24002768E2;
+			remoteInfo = PeekPop;
+		};
+		34800C181C8C3263009929FA /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 34800C111C8C3263009929FA /* PeekPop.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 3453ABB11C7C3B24002768E2;
+			remoteInfo = PeekPopTests;
+		};
+		34800C1C1C8C326F009929FA /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 34800C111C8C3263009929FA /* PeekPop.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 3453ABA61C7C3B24002768E2;
+			remoteInfo = PeekPop;
+		};
 /* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		34800C1E1C8C326F009929FA /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				34800C1B1C8C326F009929FA /* PeekPop.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		34800BEE1C8C3210009929FA /* Sample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Sample.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -36,6 +73,7 @@
 		34800C021C8C3210009929FA /* SampleTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SampleTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		34800C061C8C3210009929FA /* SampleTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SampleTests.swift; sourceTree = "<group>"; };
 		34800C081C8C3210009929FA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		34800C111C8C3263009929FA /* PeekPop.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = PeekPop.xcodeproj; path = ../../PeekPop.xcodeproj; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -43,6 +81,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				34800C1A1C8C326F009929FA /* PeekPop.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -59,6 +98,7 @@
 		34800BE51C8C3210009929FA = {
 			isa = PBXGroup;
 			children = (
+				34800C111C8C3263009929FA /* PeekPop.xcodeproj */,
 				34800BF01C8C3210009929FA /* Sample */,
 				34800C051C8C3210009929FA /* SampleTests */,
 				34800BEF1C8C3210009929FA /* Products */,
@@ -96,6 +136,15 @@
 			path = SampleTests;
 			sourceTree = "<group>";
 		};
+		34800C121C8C3263009929FA /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				34800C171C8C3263009929FA /* PeekPop.framework */,
+				34800C191C8C3263009929FA /* PeekPopTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -106,10 +155,12 @@
 				34800BEA1C8C3210009929FA /* Sources */,
 				34800BEB1C8C3210009929FA /* Frameworks */,
 				34800BEC1C8C3210009929FA /* Resources */,
+				34800C1E1C8C326F009929FA /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				34800C1D1C8C326F009929FA /* PBXTargetDependency */,
 			);
 			name = Sample;
 			productName = Sample;
@@ -164,6 +215,12 @@
 			mainGroup = 34800BE51C8C3210009929FA;
 			productRefGroup = 34800BEF1C8C3210009929FA /* Products */;
 			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = 34800C121C8C3263009929FA /* Products */;
+					ProjectRef = 34800C111C8C3263009929FA /* PeekPop.xcodeproj */;
+				},
+			);
 			projectRoot = "";
 			targets = (
 				34800BED1C8C3210009929FA /* Sample */,
@@ -171,6 +228,23 @@
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		34800C171C8C3263009929FA /* PeekPop.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = PeekPop.framework;
+			remoteRef = 34800C161C8C3263009929FA /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		34800C191C8C3263009929FA /* PeekPopTests.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = PeekPopTests.xctest;
+			remoteRef = 34800C181C8C3263009929FA /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		34800BEC1C8C3210009929FA /* Resources */ = {
@@ -217,6 +291,11 @@
 			isa = PBXTargetDependency;
 			target = 34800BED1C8C3210009929FA /* Sample */;
 			targetProxy = 34800C031C8C3210009929FA /* PBXContainerItemProxy */;
+		};
+		34800C1D1C8C326F009929FA /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = PeekPop;
+			targetProxy = 34800C1C1C8C326F009929FA /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -326,6 +405,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = Sample/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.roymarmelstein.Sample;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -337,6 +417,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = Sample/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.roymarmelstein.Sample;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -386,6 +467,7 @@
 				34800C0D1C8C3210009929FA /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		34800C0E1C8C3210009929FA /* Build configuration list for PBXNativeTarget "SampleTests" */ = {
 			isa = XCConfigurationList;
@@ -394,6 +476,7 @@
 				34800C101C8C3210009929FA /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
