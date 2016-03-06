@@ -36,8 +36,10 @@ class PeekPopGestureRecognizer: UIGestureRecognizer
         if let touch = touches.first where isTouchValid(touch)
         {
             if #available(iOS 9.0, *) {
-                if traitCollection?.forceTouchCapability != UIForceTouchCapability.Available {
+                if traitCollection?.forceTouchCapability == UIForceTouchCapability.Available && TARGET_OS_SIMULATOR != 1 {
                     handleTouch(touch)
+                }
+                else {
                     startTimers()
                 }
             }
@@ -51,7 +53,11 @@ class PeekPopGestureRecognizer: UIGestureRecognizer
     {
         if let touch = touches.first
         {
-            handleTouch(touch)
+            if #available(iOS 9.0, *) {
+                if traitCollection?.forceTouchCapability == UIForceTouchCapability.Available && TARGET_OS_SIMULATOR != 1 {
+                    handleTouch(touch)
+                }
+            }
         }
     }
     
@@ -80,10 +86,9 @@ class PeekPopGestureRecognizer: UIGestureRecognizer
     private func handleTouch(touch: UITouch)
     {
         if #available(iOS 9.0, *) {
-            if traitCollection?.forceTouchCapability == UIForceTouchCapability.Available {
-                let forcePercentage = touch.force/touch.maximumPossibleForce
-                handleForce(Double(forcePercentage))
-            }
+            self.invalidateTimers()
+            let forcePercentage = touch.force/touch.maximumPossibleForce
+            handleForce(Double(forcePercentage))
         }
     }
     
