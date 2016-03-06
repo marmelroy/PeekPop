@@ -12,6 +12,8 @@ public class PeekPop {
     
     var viewController: UIViewController
     
+    var thresholds = [0.33, 0.66, 1.0]
+    
     private var previewingContexts = [PreviewingContext]()
     
     public init(viewController: UIViewController) {

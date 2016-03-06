@@ -13,10 +13,14 @@ class PeekPopGestureRecognizer: UIGestureRecognizer
 {
     
     let timerLowerThreshold = 0.4
-    let timerMaxThreshold = 2.5
+    let timerMaxThreshold = 4.5
+    
     
     var target: PeekPop?
     var forceValue: Double = 0.0
+    var initialMajorRadius: CGFloat?
+    
+    var holdValue: Bool = false
     
     var timer: NSTimer?
     var timerStart: NSDate?
@@ -41,10 +45,12 @@ class PeekPopGestureRecognizer: UIGestureRecognizer
                     handleTouch(touch)
                 }
                 else {
+                    initialMajorRadius = touch.majorRadius
                     startTimers()
                 }
             }
             else {
+                initialMajorRadius = touch.majorRadius
                 startTimers()
             }
         }
@@ -58,6 +64,23 @@ class PeekPopGestureRecognizer: UIGestureRecognizer
                 if traitCollection?.forceTouchCapability == UIForceTouchCapability.Available && TARGET_OS_SIMULATOR != 1 {
                     handleTouch(touch)
                 }
+                else {
+                    testMajorRadiusChange(touch.majorRadius)
+                }
+            }
+            else {
+                testMajorRadiusChange(touch.majorRadius)
+            }
+        }
+    }
+    
+    func testMajorRadiusChange(majorRadius: CGFloat) {
+        guard let initialMajorRadius = initialMajorRadius, targetValue = target?.thresholds[1] else {
+            return
+        }
+        if initialMajorRadius/majorRadius < 0.9  {
+            if forceValue < targetValue {
+                forceValue = targetValue
             }
         }
     }
@@ -105,11 +128,9 @@ class PeekPopGestureRecognizer: UIGestureRecognizer
     func longPress() {
         let timerValue = timerStart?.timeIntervalSinceNow ?? 0.0
         let timeInterval = abs(timerValue)
-        if timeInterval > timerLowerThreshold {
-            var force = (timeInterval-timerLowerThreshold)/(timerMaxThreshold-timerLowerThreshold)
-            if timeInterval > timerMaxThreshold {
-                force = 1.0
-            }
+        if timeInterval > timerLowerThreshold && holdValue == false {
+            let timerAddition = 0.1/(timerMaxThreshold-timerLowerThreshold)
+            let force = min(forceValue + timerAddition, 1.0)
             handleForce(force)
         }
     }
