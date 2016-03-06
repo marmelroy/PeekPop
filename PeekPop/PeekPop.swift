@@ -17,41 +17,25 @@ public class PeekPop {
     }
     
     // Registers a view controller to participate with 3D Touch preview (peek) and commit (pop).
-    public func registerForPreviewingWithDelegate(delegate: UIViewControllerPeekPopDelegate, sourceView: UIView) {
-        if #available(iOS 9.0, *) {
-            if let systemDelegate = delegate as? UIViewControllerPreviewingDelegate {
-                viewController.registerForPreviewingWithDelegate(systemDelegate, sourceView: sourceView)
-            }
-        }
+    public func registerForPreviewingWithDelegate(delegate: PeekPopPreviewingDelegate, sourceView: UIView) -> PreviewingContext {
+        return PreviewingContext(delegate: delegate, sourceView: sourceView, sourceRect: sourceView.frame)
     }
     
     // Unregisters a view controller to participate with 3D Touch preview (peek) and commit (pop).
-    public func unregisterForPreviewingWithContext(previewing: UIViewControllerPeekPreviewing) {
-        if #available(iOS 9.0, *) {
-            if let systemPreviewing = previewing as? UIViewControllerPreviewing {
-                viewController.unregisterForPreviewingWithContext(systemPreviewing)
-            }
-        }
+    public func unregisterForPreviewingWithContext(previewing: PreviewingContext) {
     }
 
 }
 
-public protocol UIViewControllerPeekPopDelegate: NSObjectProtocol {
-    func previewingContext(previewingContext: UIViewControllerPeekPreviewing, viewControllerForLocation location: CGPoint) -> UIViewController?
-    func previewingContext(previewingContext: UIViewControllerPeekPreviewing, commitViewController viewControllerToCommit: UIViewController)
-
+public struct PreviewingContext {
+    public let delegate: PeekPopPreviewingDelegate
+    public let sourceView: UIView
+    public let sourceRect: CGRect
 }
 
-public protocol UIViewControllerPeekPreviewing: NSObjectProtocol {
-    
-    // This gesture can be used to cause the previewing presentation to wait until one of your gestures fails or to allow simultaneous recognition during the initial phase of the preview presentation.
-    var previewingGestureRecognizerForFailureRelationship: UIGestureRecognizer { get }
-    
-    var delegate: UIViewControllerPeekPopDelegate { get }
-    var sourceView: UIView { get }
-    
-    // This rect will be set to the bounds of sourceView before each call to
-    // -previewingContext:viewControllerForLocation:
-    
-    var sourceRect: CGRect { get set }
+
+public protocol PeekPopPreviewingDelegate {
+    // If you return nil, a preview presentation will not be performed
+    func previewingContext(previewingContext: PreviewingContext, viewControllerForLocation location: CGPoint) -> UIViewController?
+    func previewingContext(previewingContext: PreviewingContext, commitViewController viewControllerToCommit: UIViewController)
 }
