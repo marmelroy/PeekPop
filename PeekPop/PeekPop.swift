@@ -14,6 +14,9 @@ public class PeekPop {
     
     var thresholds = [0.33, 0.66, 1.0]
     
+    var screenshotBlurredView: UIImage?
+    var screenshotSourceView: UIImage?
+    
     private var previewingContexts = [PreviewingContext]()
     
     public init(viewController: UIViewController) {
@@ -39,11 +42,47 @@ public class PeekPop {
     }
     
     func peekPopAnimate(progress: Double) {
+        // If there aren't any screenshots, take them
+        if screenshotBlurredView == nil {
+            let screenshot = screenshotView(viewController.view)
+            let blurredScreenshot = applyBlurEffect(screenshot)
+            screenshotBlurredView = blurredScreenshot
+        }
+        if screenshotSourceView == nil {
+            screenshotSourceView = screenshotView(previewingContexts.first!.sourceView)
+        }
         print("force \(progress)")
     }
     
     func peekPopRelease() {
+        screenshotBlurredView = nil
+        screenshotSourceView = nil
         print("release")
+    }
+    
+    func screenshotView(view: UIView) -> UIImage? {
+        UIGraphicsBeginImageContextWithOptions(view.layer.frame.size, false, UIScreen.mainScreen().scale);
+        if let context = UIGraphicsGetCurrentContext() {
+            view.layer.renderInContext(context)
+            if let image = UIGraphicsGetImageFromCurrentImageContext() {
+                return image
+            }
+        }
+        return nil
+    }
+
+    
+    func applyBlurEffect(image: UIImage?) -> UIImage? {
+        guard let image = image else {
+            return nil
+        }
+        if let blurFilter = CIFilter(name: "CIGaussianBlur") {
+            blurFilter.setValue(image.CIImage, forKey: "inputImage")
+            if let result = blurFilter.valueForKey("outputImage") as? CIImage {
+                return UIImage(CIImage: result)
+            }
+        }
+        return nil
     }
     
 }
