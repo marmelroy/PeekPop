@@ -13,11 +13,10 @@ public class PeekPop {
     var viewController: UIViewController
     
     var thresholds = [0.33, 0.66, 1.0]
-    
-    var screenshotBlurredView: UIImage?
-    var screenshotSourceView: UIImage?
-    
+        
     private var previewingContexts = [PreviewingContext]()
+    
+    var peekPopView: PeekPopView?
     
     public init(viewController: UIViewController) {
         self.viewController = viewController
@@ -43,20 +42,20 @@ public class PeekPop {
     
     func peekPopAnimate(progress: Double) {
         // If there aren't any screenshots, take them
-        if screenshotBlurredView == nil {
-            let screenshot = screenshotView(viewController.view)
-            let blurredScreenshot = applyBlurEffect(screenshot)
-            screenshotBlurredView = blurredScreenshot
+        if peekPopView == nil {
+            let view = PeekPopView()
+            UIApplication.sharedApplication().windows.first?.subviews.first?.addSubview(view)
+            peekPopView = view
+            peekPopView?.viewControllerScreenshot = screenshotView(viewController.view)
         }
-        if screenshotSourceView == nil {
-            screenshotSourceView = screenshotView(previewingContexts.first!.sourceView)
-        }
+        peekPopView?.frame = viewController.view.bounds
+        peekPopView?.peekPopAnimate(progress)
         print("force \(progress)")
     }
     
     func peekPopRelease() {
-        screenshotBlurredView = nil
-        screenshotSourceView = nil
+        peekPopView?.removeFromSuperview()
+        peekPopView = nil
         print("release")
     }
     
@@ -65,25 +64,15 @@ public class PeekPop {
         if let context = UIGraphicsGetCurrentContext() {
             view.layer.renderInContext(context)
             if let image = UIGraphicsGetImageFromCurrentImageContext() {
+                UIGraphicsEndImageContext()
                 return image
             }
         }
+        UIGraphicsEndImageContext()
         return nil
     }
 
     
-    func applyBlurEffect(image: UIImage?) -> UIImage? {
-        guard let image = image else {
-            return nil
-        }
-        if let blurFilter = CIFilter(name: "CIGaussianBlur") {
-            blurFilter.setValue(image.CIImage, forKey: "inputImage")
-            if let result = blurFilter.valueForKey("outputImage") as? CIImage {
-                return UIImage(CIImage: result)
-            }
-        }
-        return nil
-    }
     
 }
 

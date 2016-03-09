@@ -7,10 +7,15 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3436AB011C90085300512400 /* PeekPopView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3436AB001C90085300512400 /* PeekPopView.swift */; };
+		3436AB051C900B0C00512400 /* UIImage+ImageEffects.h in Headers */ = {isa = PBXBuildFile; fileRef = 3436AB031C900B0C00512400 /* UIImage+ImageEffects.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		3436AB061C900B0C00512400 /* UIImage+ImageEffects.m in Sources */ = {isa = PBXBuildFile; fileRef = 3436AB041C900B0C00512400 /* UIImage+ImageEffects.m */; };
+		3436AB081C900B4200512400 /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3436AB071C900B4200512400 /* Accelerate.framework */; };
 		3453ABAB1C7C3B24002768E2 /* PeekPop.h in Headers */ = {isa = PBXBuildFile; fileRef = 3453ABAA1C7C3B24002768E2 /* PeekPop.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		3453ABB21C7C3B24002768E2 /* PeekPop.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3453ABA71C7C3B24002768E2 /* PeekPop.framework */; };
 		3453ABB71C7C3B24002768E2 /* PeekPopTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3453ABB61C7C3B24002768E2 /* PeekPopTests.swift */; };
 		34800C201C8C32D8009929FA /* PeekPop.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34800C1F1C8C32D8009929FA /* PeekPop.swift */; };
+		34800C281C8CAE30009929FA /* PeekPopGestureRecognizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34800C271C8CAE30009929FA /* PeekPopGestureRecognizer.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -24,6 +29,10 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		3436AB001C90085300512400 /* PeekPopView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PeekPopView.swift; sourceTree = "<group>"; };
+		3436AB031C900B0C00512400 /* UIImage+ImageEffects.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+ImageEffects.h"; sourceTree = "<group>"; };
+		3436AB041C900B0C00512400 /* UIImage+ImageEffects.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+ImageEffects.m"; sourceTree = "<group>"; };
+		3436AB071C900B4200512400 /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = System/Library/Frameworks/Accelerate.framework; sourceTree = SDKROOT; };
 		3453ABA71C7C3B24002768E2 /* PeekPop.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = PeekPop.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		3453ABAA1C7C3B24002768E2 /* PeekPop.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PeekPop.h; sourceTree = "<group>"; };
 		3453ABAC1C7C3B24002768E2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -31,6 +40,7 @@
 		3453ABB61C7C3B24002768E2 /* PeekPopTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PeekPopTests.swift; sourceTree = "<group>"; };
 		3453ABB81C7C3B24002768E2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		34800C1F1C8C32D8009929FA /* PeekPop.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PeekPop.swift; sourceTree = "<group>"; };
+		34800C271C8CAE30009929FA /* PeekPopGestureRecognizer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PeekPopGestureRecognizer.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -38,6 +48,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3436AB081C900B4200512400 /* Accelerate.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -76,6 +87,11 @@
 				3453ABAA1C7C3B24002768E2 /* PeekPop.h */,
 				3453ABAC1C7C3B24002768E2 /* Info.plist */,
 				34800C1F1C8C32D8009929FA /* PeekPop.swift */,
+				3436AB001C90085300512400 /* PeekPopView.swift */,
+				34800C271C8CAE30009929FA /* PeekPopGestureRecognizer.swift */,
+				3436AB031C900B0C00512400 /* UIImage+ImageEffects.h */,
+				3436AB041C900B0C00512400 /* UIImage+ImageEffects.m */,
+				3436AB071C900B4200512400 /* Accelerate.framework */,
 			);
 			path = PeekPop;
 			sourceTree = "<group>";
@@ -97,6 +113,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				3453ABAB1C7C3B24002768E2 /* PeekPop.h in Headers */,
+				3436AB051C900B0C00512400 /* UIImage+ImageEffects.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -197,6 +214,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3436AB061C900B0C00512400 /* UIImage+ImageEffects.m in Sources */,
+				3436AB011C90085300512400 /* PeekPopView.swift in Sources */,
+				34800C281C8CAE30009929FA /* PeekPopGestureRecognizer.swift in Sources */,
 				34800C201C8C32D8009929FA /* PeekPop.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

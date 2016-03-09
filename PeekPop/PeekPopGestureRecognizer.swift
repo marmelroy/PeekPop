@@ -13,7 +13,7 @@ class PeekPopGestureRecognizer: UIGestureRecognizer
 {
     
     let timerLowerThreshold = 0.4
-    let timerMaxThreshold = 4.0
+    let timerMaxThreshold = 2.0
     
     var target: PeekPop?
     var forceValue: Double = 0.0
@@ -113,7 +113,9 @@ class PeekPopGestureRecognizer: UIGestureRecognizer
     private func handleTouch(touch: UITouch)
     {
         if #available(iOS 9.0, *) {
-            self.invalidateTimers()
+            if timer != nil {
+                self.invalidateTimers()
+            }
             let forcePercentage = touch.force/touch.maximumPossibleForce
             handleForce(Double(forcePercentage))
         }
