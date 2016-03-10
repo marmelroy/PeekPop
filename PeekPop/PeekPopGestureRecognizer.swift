@@ -14,7 +14,7 @@ class PeekPopGestureRecognizer: UIGestureRecognizer
     
     var thresholds = [0.33, 0.66, 1.0]
     
-    let interpolationStep = 0.015
+    let interpolationStep = 0.01
 
     var target: PeekPop?
     
@@ -109,8 +109,13 @@ class PeekPopGestureRecognizer: UIGestureRecognizer
         self.cancelTouches()
     }
     
+    func resetValues() {
+        forceValue = 0.0
+        currentThresholdIndex = 0
+    }
+    
     private func cancelTouches() {
-        if forceValue != 0.0 {
+        if forceValue < 0.98 {
             targetForceValue = 0.0
             currentThresholdIndex = 0
         }
@@ -135,13 +140,15 @@ class PeekPopGestureRecognizer: UIGestureRecognizer
     }
     
     func longPress() {
-        if forceValue >= targetForceValue {
-            if (thresholds.count > currentThresholdIndex + 1) {
-                currentThresholdIndex = currentThresholdIndex + 1
-                let nextThreshold = thresholds[currentThresholdIndex]
-                targetForceValue = nextThreshold
-            }
-        }
+        targetForceValue = 0.99
+//
+//        if forceValue <= targetForceValue {
+//            if (thresholds.count >= currentThresholdIndex + 1) {
+//                currentThresholdIndex = currentThresholdIndex + 1
+//                let nextThreshold = thresholds[currentThresholdIndex]
+//                print("next threshold \(nextThreshold)")
+//            }
+//        }
     }
     
     func animateToTargetForce() {

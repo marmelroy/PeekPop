@@ -8,11 +8,12 @@
 
 import Foundation
 
-public class PeekPop {
+public class PeekPop: NSObject {
     
     var viewController: UIViewController
     var targetViewController: UIViewController?
 
+    var peekPopGestureRecognizer: PeekPopGestureRecognizer?
     
     private var previewingContexts = [PreviewingContext]()
     
@@ -30,6 +31,7 @@ public class PeekPop {
         gestureRecognizer.traitCollection = viewController.traitCollection
         gestureRecognizer.context = previewing
         viewController.view.addGestureRecognizer(gestureRecognizer)
+        peekPopGestureRecognizer = gestureRecognizer
         return previewing
     }
     
@@ -61,8 +63,23 @@ public class PeekPop {
         else {
             peekPopView?.frame = viewController.view.bounds
         }
-        peekPopView?.peekPopAnimate(progress)
+        if progress < 0.99 {
+            peekPopView?.peekPopAnimate(progress)
+        }
+        else {
+            self.triggerTarget(context!)
+        }
         print("force \(progress)")
+    }
+    
+    func triggerTarget(context: PreviewingContext){
+        guard let targetViewController = targetViewController else {
+            return
+        }
+        print("trigger target")
+        context.delegate.previewingContext(context, commitViewController: targetViewController)
+        peekPopGestureRecognizer?.resetValues()
+        self.performSelector("peekPopRelease", withObject: nil, afterDelay: 0.1)
     }
     
     func peekPopRelease() {
