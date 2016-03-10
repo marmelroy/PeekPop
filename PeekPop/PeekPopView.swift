@@ -10,7 +10,6 @@ import UIKit
 
 class PeekPopView: UIView {
     
-    
     let blurFilter = CIFilter(name: "CIGaussianBlur")
     
     var viewControllerScreenshot: UIImage? = nil {
@@ -19,6 +18,8 @@ class PeekPopView: UIView {
             generateScreenshots()
         }
     }
+    
+    var targetViewControllerScreenshot: UIImage? = nil
 
     var sourceViewRect = CGRect.zero
     var sourceViewScreenshot: UIImage?
@@ -29,6 +30,8 @@ class PeekPopView: UIView {
     var blurredImageViewSecond = UIImageView()
     var overlayView = UIView()
     var sourceImageView = UIImageView()
+    var targetPreviewView = PeekPopTargetPreviewView()
+
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -50,6 +53,7 @@ class PeekPopView: UIView {
         self.addSubview(blurredLowestLevel)
         self.addSubview(blurredImageViewFirst)
         self.addSubview(blurredImageViewSecond)
+        self.addSubview(targetPreviewView)
         overlayView.backgroundColor = UIColor(white: 0.80, alpha: 0.5)
         self.addSubview(overlayView)
         self.addSubview(sourceImageView)
@@ -59,6 +63,8 @@ class PeekPopView: UIView {
         blurredLowestLevel.frame = self.bounds
         blurredImageViewFirst.frame = self.bounds
         blurredImageViewSecond.frame = self.bounds
+        targetPreviewView.imageViewFrame = self.bounds
+        targetPreviewView.frame.size = sourceViewRect.size
         sourceImageView.frame = sourceViewRect
     }
     
@@ -77,8 +83,24 @@ class PeekPopView: UIView {
         blurredImageViewSecond.alpha = CGFloat(blurRemainder)
         overlayView.alpha = CGFloat(adjustedProgress)
         sourceImageView.image = sourceViewScreenshot
-        sourceImageView.transform = CGAffineTransformMakeScale(adjustedSourceImageScale, adjustedSourceImageScale)
-
+        if progress < 0.3 {
+            sourceImageView.hidden = false
+            sourceImageView.transform = CGAffineTransformMakeScale(adjustedSourceImageScale, adjustedSourceImageScale)
+            targetPreviewView.hidden = true
+        }
+        else {
+            if progress > 0.33 {
+                targetPreviewView.hidden = false
+                let targetAdjustedScale: CGFloat = min(CGFloat((progress - 0.3)/0.33), CGFloat(1.0))
+                
+                let widthDelta = 320 - sourceViewRect.size.width
+                let heightDelta = 420 - sourceViewRect.size.height
+                targetPreviewView.imageView.image = targetViewControllerScreenshot
+                targetPreviewView.frame.size = CGSizeMake(sourceViewRect.size.width + widthDelta*targetAdjustedScale, sourceViewRect.size.height + heightDelta*targetAdjustedScale)
+                targetPreviewView.center = CGPointMake(self.bounds.size.width/2, self.bounds.size.height/2)
+            }
+            sourceImageView.hidden = true
+        }
     }
     
     func generateScreenshots() {
@@ -100,3 +122,35 @@ class PeekPopView: UIView {
     }
     
 }
+
+class PeekPopTargetPreviewView: UIView {
+    
+    var imageView = UIImageView()
+    var imageViewFrame = CGRect.zero
+
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        setup()
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+        setup()
+    }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        self.clipsToBounds = true
+        imageView.frame = imageViewFrame
+        imageView.center = CGPointMake(self.bounds.size.width/2, self.bounds.size.height/2)
+    }
+    
+    
+    func setup() {
+        self.layer.cornerRadius = 20
+        self.addSubview(imageView)
+    }
+}
+
+
+

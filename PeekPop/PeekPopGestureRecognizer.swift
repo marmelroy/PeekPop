@@ -14,7 +14,7 @@ class PeekPopGestureRecognizer: UIGestureRecognizer
     
     var thresholds = [0.33, 0.66, 1.0]
     
-    let interpolationStep = 0.02
+    let interpolationStep = 0.015
 
     var target: PeekPop?
     
@@ -127,7 +127,11 @@ class PeekPopGestureRecognizer: UIGestureRecognizer
     
     func isTouchValid(touch: UITouch) -> Bool {
         let sourceRect = context?.sourceView.frame ?? CGRect.zero
-        return CGRectContainsPoint(sourceRect, touch.locationInView(self.view))
+        let touchLocation = touch.locationInView(self.view)
+        if let context = context {
+            target?.targetViewController = context.delegate.previewingContext(context, viewControllerForLocation: touchLocation)
+        }
+        return CGRectContainsPoint(sourceRect, touchLocation)
     }
     
     func longPress() {
@@ -157,6 +161,7 @@ class PeekPopGestureRecognizer: UIGestureRecognizer
         else {
             forceValue = max(forceValue - interpolationStep*2, targetForceValue)
             if forceValue <= targetForceValue {
+                forceValue = 0.0
                 displayLink?.invalidate()
                 target?.peekPopRelease()
             }

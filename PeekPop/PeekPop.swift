@@ -11,7 +11,9 @@ import Foundation
 public class PeekPop {
     
     var viewController: UIViewController
-            
+    var targetViewController: UIViewController?
+
+    
     private var previewingContexts = [PreviewingContext]()
     
     var peekPopView: PeekPopView?
@@ -44,7 +46,12 @@ public class PeekPop {
             let view = PeekPopView()
             UIApplication.sharedApplication().windows.first?.subviews.first?.addSubview(view)
             peekPopView = view
+            context?.sourceView.hidden = true
             peekPopView?.viewControllerScreenshot = screenshotView(viewController.view)
+            context?.sourceView.hidden = false
+            if let targetViewController = targetViewController {
+                peekPopView?.targetViewControllerScreenshot = screenshotView(targetViewController.view, inHierarchy: false)
+            }
             if let context = context {
                 peekPopView?.sourceViewScreenshot = screenshotView(context.sourceView)
                 peekPopView?.sourceViewRect = viewController.view.convertRect(context.sourceView.frame, toView: viewController.view)
@@ -65,14 +72,19 @@ public class PeekPop {
         print("release")
     }
     
-    func screenshotView(view: UIView) -> UIImage? {
+    func screenshotView(view: UIView, inHierarchy: Bool = true) -> UIImage? {
         UIGraphicsBeginImageContextWithOptions(view.layer.frame.size, false, UIScreen.mainScreen().scale);
-        if let context = UIGraphicsGetCurrentContext() {
-            view.layer.renderInContext(context)
-            if let image = UIGraphicsGetImageFromCurrentImageContext() {
-                UIGraphicsEndImageContext()
-                return image
+        if inHierarchy == true {
+            view.drawViewHierarchyInRect(view.bounds, afterScreenUpdates: true)
+        }
+        else {
+            if let context = UIGraphicsGetCurrentContext() {
+                view.layer.renderInContext(context)
             }
+        }
+        if let image = UIGraphicsGetImageFromCurrentImageContext() {
+            UIGraphicsEndImageContext()
+            return image
         }
         UIGraphicsEndImageContext()
         return nil
