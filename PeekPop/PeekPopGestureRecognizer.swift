@@ -20,7 +20,7 @@ class PeekPopGestureRecognizer: UIGestureRecognizer
     
     var forceValue: Double = 0.0 {
         didSet {
-            handleForce(forceValue)
+            target?.peekPopAnimate(forceValue, context: context)
         }
     }
     
@@ -168,12 +168,4 @@ class PeekPopGestureRecognizer: UIGestureRecognizer
         }
     }
     
-    private func handleForce(force: Double)
-    {
-        if force == 0 {
-            return
-        }
-        target?.peekPopAnimate(force, context: context)
-    }
-
 }

@@ -92,12 +92,14 @@ class PeekPopView: UIView {
             if progress > 0.33 {
                 targetPreviewView.hidden = false
                 let targetAdjustedScale: CGFloat = min(CGFloat((progress - 0.3)/0.33), CGFloat(1.0))
-                
+                let sourceViewCenter = CGPointMake(sourceViewRect.origin.x + sourceViewRect.size.width/2, sourceViewRect.origin.y + sourceViewRect.size.height/2)
+                let originXDelta = self.bounds.size.width/2 - sourceViewCenter.x
+                let originYDelta = self.bounds.size.height/2 - sourceViewCenter.y
                 let widthDelta = 320 - sourceViewRect.size.width
                 let heightDelta = 420 - sourceViewRect.size.height
                 targetPreviewView.imageView.image = targetViewControllerScreenshot
                 targetPreviewView.frame.size = CGSizeMake(sourceViewRect.size.width + widthDelta*targetAdjustedScale, sourceViewRect.size.height + heightDelta*targetAdjustedScale)
-                targetPreviewView.center = CGPointMake(self.bounds.size.width/2, self.bounds.size.height/2)
+                targetPreviewView.center = CGPointMake(sourceViewCenter.x + originXDelta*targetAdjustedScale, sourceViewCenter.y + originYDelta*targetAdjustedScale)
             }
             sourceImageView.hidden = true
         }
