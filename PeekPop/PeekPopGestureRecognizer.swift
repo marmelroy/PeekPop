@@ -93,7 +93,7 @@ class PeekPopGestureRecognizer: UIGestureRecognizer
         let secondThreshold = thresholds[1]
         if initialMajorRadius/majorRadius < 0.9  {
             if forceValue < secondThreshold && forceValue > firstThreshold {
-                forceValue = secondThreshold
+                targetForceValue = secondThreshold
             }
         }
     }
