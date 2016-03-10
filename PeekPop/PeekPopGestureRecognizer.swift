@@ -12,20 +12,32 @@ import UIKit.UIGestureRecognizerSubclass
 class PeekPopGestureRecognizer: UIGestureRecognizer
 {
     
-    let timerLowerThreshold = 0.4
-    let timerMaxThreshold = 1.5
+    var thresholds = [0.33, 0.66, 1.0]
     
+    let interpolationStep = 0.02
+
     var target: PeekPop?
-    var forceValue: Double = 0.0
+    
+    var forceValue: Double = 0.0 {
+        didSet {
+            handleForce(forceValue)
+        }
+    }
+    
+    var targetForceValue: Double = 0.0 {
+        didSet {
+            animateToTargetForce()
+        }
+    }
+
+    var currentThresholdIndex = 0
+    
     var initialMajorRadius: CGFloat?
     
-    var holdValue: Bool = false
-    
-    var timer: NSTimer?
-    var timerStart: NSDate?
-
     var traitCollection: UITraitCollection?
     var context: PreviewingContext?
+    
+    var displayLink: CADisplayLink?
 
     override required init(target: AnyObject?, action: Selector)
     {
@@ -45,12 +57,12 @@ class PeekPopGestureRecognizer: UIGestureRecognizer
                 }
                 else {
                     initialMajorRadius = touch.majorRadius
-                    startTimers()
+                    longPress()
                 }
             }
             else {
                 initialMajorRadius = touch.majorRadius
-                startTimers()
+                longPress()
             }
         }
     }
@@ -74,12 +86,14 @@ class PeekPopGestureRecognizer: UIGestureRecognizer
     }
     
     func testMajorRadiusChange(majorRadius: CGFloat) {
-        guard let initialMajorRadius = initialMajorRadius, firstThreshold = target?.thresholds.first,  targetValue = target?.thresholds[1] else {
+        guard let initialMajorRadius = initialMajorRadius else {
             return
         }
+        let firstThreshold = thresholds.first
+        let secondThreshold = thresholds[1]
         if initialMajorRadius/majorRadius < 0.9  {
-            if forceValue < targetValue && forceValue > firstThreshold {
-                forceValue = targetValue
+            if forceValue < secondThreshold && forceValue > firstThreshold {
+                forceValue = secondThreshold
             }
         }
     }
@@ -87,37 +101,27 @@ class PeekPopGestureRecognizer: UIGestureRecognizer
     override func touchesEnded(touches: Set<UITouch>, withEvent event: UIEvent)
     {
         super.touchesEnded(touches, withEvent: event)
-        self.invalidateTimers()
+        self.cancelTouches()
     }
     
     override func touchesCancelled(touches: Set<UITouch>, withEvent event: UIEvent) {
         super.touchesCancelled(touches, withEvent: event)
-        self.invalidateTimers()
+        self.cancelTouches()
     }
     
-    private func startTimers() {
-        timerStart = NSDate()
-        timer = NSTimer.scheduledTimerWithTimeInterval(0.1, target: self, selector: "longPress", userInfo: nil, repeats: true)
-    }
-    
-    private func invalidateTimers() {
+    private func cancelTouches() {
         if forceValue != 0.0 {
-            forceValue = 0.0
-            target?.peekPopRelease()
+            targetForceValue = 0.0
+            currentThresholdIndex = 0
         }
-        timer?.invalidate()
-        timer = nil
-        timerStart = nil
     }
     
     private func handleTouch(touch: UITouch)
     {
         if #available(iOS 9.0, *) {
-            if timer != nil {
-                self.invalidateTimers()
-            }
+            self.cancelTouches()
             let forcePercentage = touch.force/touch.maximumPossibleForce
-            handleForce(Double(forcePercentage))
+            targetForceValue = Double(forcePercentage)
         }
     }
     
@@ -127,12 +131,35 @@ class PeekPopGestureRecognizer: UIGestureRecognizer
     }
     
     func longPress() {
-        let timerValue = timerStart?.timeIntervalSinceNow ?? 0.0
-        let timeInterval = abs(timerValue)
-        if timeInterval > timerLowerThreshold && holdValue == false {
-            let timerAddition = 0.1/(timerMaxThreshold-timerLowerThreshold)
-            let force = min(forceValue + timerAddition, 1.0)
-            handleForce(force)
+        if forceValue >= targetForceValue {
+            if (thresholds.count > currentThresholdIndex + 1) {
+                currentThresholdIndex = currentThresholdIndex + 1
+                let nextThreshold = thresholds[currentThresholdIndex]
+                targetForceValue = nextThreshold
+            }
+        }
+    }
+    
+    func animateToTargetForce() {
+        displayLink?.invalidate()
+        displayLink = CADisplayLink(target: self, selector: "updateForceToTarget")
+        displayLink?.addToRunLoop(NSRunLoop.mainRunLoop(), forMode: NSRunLoopCommonModes)
+    }
+    
+    func updateForceToTarget() {
+        let isIncrease = (forceValue < targetForceValue)
+        if isIncrease {
+            forceValue = min(forceValue + interpolationStep, targetForceValue)
+            if forceValue >= targetForceValue {
+                displayLink?.invalidate()
+            }
+        }
+        else {
+            forceValue = max(forceValue - interpolationStep*2, targetForceValue)
+            if forceValue <= targetForceValue {
+                displayLink?.invalidate()
+                target?.peekPopRelease()
+            }
         }
     }
     
@@ -141,7 +168,6 @@ class PeekPopGestureRecognizer: UIGestureRecognizer
         if force == 0 {
             return
         }
-        self.forceValue = force
         target?.peekPopAnimate(force, context: context)
     }
 
