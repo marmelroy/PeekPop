@@ -13,7 +13,7 @@ class PeekPopGestureRecognizer: UIGestureRecognizer
 {
     
     let timerLowerThreshold = 0.4
-    let timerMaxThreshold = 2.0
+    let timerMaxThreshold = 1.5
     
     var target: PeekPop?
     var forceValue: Double = 0.0
@@ -25,7 +25,7 @@ class PeekPopGestureRecognizer: UIGestureRecognizer
     var timerStart: NSDate?
 
     var traitCollection: UITraitCollection?
-    var sourceView: UIView?
+    var context: PreviewingContext?
 
     override required init(target: AnyObject?, action: Selector)
     {
@@ -122,7 +122,7 @@ class PeekPopGestureRecognizer: UIGestureRecognizer
     }
     
     func isTouchValid(touch: UITouch) -> Bool {
-        let sourceRect = sourceView?.frame ?? CGRect.zero
+        let sourceRect = context?.sourceView.frame ?? CGRect.zero
         return CGRectContainsPoint(sourceRect, touch.locationInView(self.view))
     }
     
@@ -142,7 +142,7 @@ class PeekPopGestureRecognizer: UIGestureRecognizer
             return
         }
         self.forceValue = force
-        target?.peekPopAnimate(force)
+        target?.peekPopAnimate(force, context: context)
     }
 
 }

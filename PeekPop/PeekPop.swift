@@ -24,11 +24,11 @@ public class PeekPop {
     
     // Registers a view controller to participate with 3D Touch preview (peek) and commit (pop).
     public func registerForPreviewingWithDelegate(delegate: PeekPopPreviewingDelegate, sourceView: UIView) -> PreviewingContext {
-        let previewing = PreviewingContext(delegate: delegate, sourceView: sourceView, sourceRect: sourceView.frame)
+        let previewing = PreviewingContext(delegate: delegate, sourceView: sourceView)
         previewingContexts.append(previewing)
         let gestureRecognizer = PeekPopGestureRecognizer(target: self, action: "didPop")
         gestureRecognizer.traitCollection = viewController.traitCollection
-        gestureRecognizer.sourceView = sourceView
+        gestureRecognizer.context = previewing
         viewController.view.addGestureRecognizer(gestureRecognizer)
         return previewing
     }
@@ -40,15 +40,23 @@ public class PeekPop {
         }
     }
     
-    func peekPopAnimate(progress: Double) {
+    func peekPopAnimate(progress: Double, context: PreviewingContext?) {
         // If there aren't any screenshots, take them
         if peekPopView == nil {
             let view = PeekPopView()
             UIApplication.sharedApplication().windows.first?.subviews.first?.addSubview(view)
             peekPopView = view
             peekPopView?.viewControllerScreenshot = screenshotView(viewController.view)
+            if let context = context {
+                peekPopView?.sourceViewScreenshot = screenshotView(context.sourceView)
+                peekPopView?.sourceViewRect = viewController.view.convertRect(context.sourceView.frame, toView: viewController.view)
+            }
+            peekPopView?.frame = viewController.view.bounds
+            peekPopView?.didAppear()
         }
-        peekPopView?.frame = viewController.view.bounds
+        else {
+            peekPopView?.frame = viewController.view.bounds
+        }
         peekPopView?.peekPopAnimate(progress)
         print("force \(progress)")
     }
@@ -79,7 +87,6 @@ public class PeekPop {
 public struct PreviewingContext {
     public let delegate: PeekPopPreviewingDelegate
     public let sourceView: UIView
-    public let sourceRect: CGRect
 }
 
 extension PreviewingContext: Equatable {}
