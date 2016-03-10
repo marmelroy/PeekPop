@@ -46,10 +46,9 @@ public class PeekPop {
             let view = PeekPopView()
             UIApplication.sharedApplication().windows.first?.subviews.first?.addSubview(view)
             peekPopView = view
-            context?.sourceView.hidden = true
             peekPopView?.viewControllerScreenshot = screenshotView(viewController.view)
-            context?.sourceView.hidden = false
             if let targetViewController = targetViewController {
+                targetViewController.view.frame = viewController.view.bounds
                 peekPopView?.targetViewControllerScreenshot = screenshotView(targetViewController.view, inHierarchy: false)
             }
             if let context = context {
@@ -75,7 +74,7 @@ public class PeekPop {
     func screenshotView(view: UIView, inHierarchy: Bool = true) -> UIImage? {
         UIGraphicsBeginImageContextWithOptions(view.layer.frame.size, false, UIScreen.mainScreen().scale);
         if inHierarchy == true {
-            view.drawViewHierarchyInRect(view.bounds, afterScreenUpdates: true)
+            view.drawViewHierarchyInRect(view.bounds, afterScreenUpdates: false)
         }
         else {
             if let context = UIGraphicsGetCurrentContext() {
