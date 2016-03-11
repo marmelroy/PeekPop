@@ -14,7 +14,7 @@ class PeekPopGestureRecognizer: UIGestureRecognizer
     
     var thresholds = [0.33, 0.66, 1.0]
     
-    let interpolationStep = 0.01
+    var interpolationStep = 0.006
 
     var target: PeekPop?
     
@@ -56,19 +56,23 @@ class PeekPopGestureRecognizer: UIGestureRecognizer
                     handleTouch(touch)
                 }
                 else {
-                    initialMajorRadius = touch.majorRadius
-                    longPress()
+                    self.performSelector("delayedFirstTouch:", withObject: touch, afterDelay: 0.25)
                 }
             }
             else {
-                initialMajorRadius = touch.majorRadius
-                longPress()
+                self.performSelector("delayedFirstTouch:", withObject: touch, afterDelay: 0.25)
             }
         }
     }
     
+    func delayedFirstTouch(touch: UITouch) {
+        initialMajorRadius = touch.majorRadius
+        longPress()
+    }
+    
     override func touchesMoved(touches: Set<UITouch>, withEvent event: UIEvent)
     {
+        super.touchesMoved(touches, withEvent: event)
         if let touch = touches.first
         {
             if #available(iOS 9.0, *) {
@@ -89,12 +93,15 @@ class PeekPopGestureRecognizer: UIGestureRecognizer
         guard let initialMajorRadius = initialMajorRadius else {
             return
         }
-        let firstThreshold = thresholds.first
-        let secondThreshold = thresholds[1]
-        if initialMajorRadius/majorRadius < 0.9  {
-            if forceValue < secondThreshold && forceValue > firstThreshold {
-                targetForceValue = secondThreshold
-            }
+        print("MAJOR RADIUS initial \(initialMajorRadius), current MAJOR \(majorRadius)")
+
+        if initialMajorRadius/majorRadius < 0.5  {
+            print("hard")
+            interpolationStep = 0.03
+        }
+        else {
+            print("soft")
+            interpolationStep = 0.006
         }
     }
     
@@ -112,9 +119,11 @@ class PeekPopGestureRecognizer: UIGestureRecognizer
     func resetValues() {
         forceValue = 0.0
         currentThresholdIndex = 0
+        interpolationStep = 0.006
     }
     
     private func cancelTouches() {
+        NSObject.cancelPreviousPerformRequestsWithTarget(self)
         if forceValue < 0.98 {
             targetForceValue = 0.0
             currentThresholdIndex = 0
@@ -141,14 +150,6 @@ class PeekPopGestureRecognizer: UIGestureRecognizer
     
     func longPress() {
         targetForceValue = 0.99
-//
-//        if forceValue <= targetForceValue {
-//            if (thresholds.count >= currentThresholdIndex + 1) {
-//                currentThresholdIndex = currentThresholdIndex + 1
-//                let nextThreshold = thresholds[currentThresholdIndex]
-//                print("next threshold \(nextThreshold)")
-//            }
-//        }
     }
     
     func animateToTargetForce() {

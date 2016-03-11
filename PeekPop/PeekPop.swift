@@ -13,17 +13,22 @@ public class PeekPop: NSObject {
     var viewController: UIViewController
     var targetViewController: UIViewController?
 
-    var peekPopGestureRecognizer: PeekPopGestureRecognizer?
-    
+    private var peekPopGestureRecognizer: PeekPopGestureRecognizer?
+    private var peekPopView: PeekPopView?
     private var previewingContexts = [PreviewingContext]()
     
-    var peekPopView: PeekPopView?
-    
+    /**
+    Peek pop initializer
+     
+     - parameter viewController: hosting UIViewController
+     
+     - returns: PeekPop object
+     */
     public init(viewController: UIViewController) {
         self.viewController = viewController
     }
     
-    // Registers a view controller to participate with 3D Touch preview (peek) and commit (pop).
+    /// Registers a view controller to participate with 3D Touch preview (peek) and commit (pop).
     public func registerForPreviewingWithDelegate(delegate: PeekPopPreviewingDelegate, sourceView: UIView) -> PreviewingContext {
         let previewing = PreviewingContext(delegate: delegate, sourceView: sourceView)
         previewingContexts.append(previewing)
@@ -35,7 +40,7 @@ public class PeekPop: NSObject {
         return previewing
     }
     
-    // Unregisters a view controller to participate with 3D Touch preview (peek) and commit (pop).
+    /// Unregisters a view controller to participate with 3D Touch preview (peek) and commit (pop).
     public func unregisterForPreviewingWithContext(previewing: PreviewingContext) {
         if let contextIndex = previewingContexts.indexOf(previewing) {
             previewingContexts.removeAtIndex(contextIndex)
@@ -69,23 +74,20 @@ public class PeekPop: NSObject {
         else {
             self.triggerTarget(context!)
         }
-        print("force \(progress)")
     }
     
     func triggerTarget(context: PreviewingContext){
         guard let targetViewController = targetViewController else {
             return
         }
-        print("trigger target")
         context.delegate.previewingContext(context, commitViewController: targetViewController)
         peekPopGestureRecognizer?.resetValues()
-        self.performSelector("peekPopRelease", withObject: nil, afterDelay: 0.1)
+        self.performSelector("peekPopRelease", withObject: nil, afterDelay: 0.16)
     }
     
     func peekPopRelease() {
         peekPopView?.removeFromSuperview()
         peekPopView = nil
-        print("release")
     }
     
     func screenshotView(view: UIView, inHierarchy: Bool = true) -> UIImage? {
@@ -119,7 +121,6 @@ extension PreviewingContext: Equatable {}
 public func ==(lhs: PreviewingContext, rhs: PreviewingContext) -> Bool {
     return lhs.sourceView == rhs.sourceView
 }
-
 
 public protocol PeekPopPreviewingDelegate {
     // If you return nil, a preview presentation will not be performed
