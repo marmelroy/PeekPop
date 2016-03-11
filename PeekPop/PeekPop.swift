@@ -14,6 +14,7 @@ public class PeekPop: NSObject {
     var targetViewController: UIViewController?
 
     private var peekPopGestureRecognizer: PeekPopGestureRecognizer?
+    var peekPopWindow: UIWindow?
     private var peekPopView: PeekPopView?
     private var previewingContexts = [PreviewingContext]()
     
@@ -35,12 +36,11 @@ public class PeekPop: NSObject {
         let previewing = PreviewingContext(delegate: delegate, sourceView: sourceView)
         previewingContexts.append(previewing)
         if #available(iOS 9.0, *) {
-            if self.viewController.traitCollection.forceTouchCapability == UIForceTouchCapability.Available {
+            if self.viewController.traitCollection.forceTouchCapability == UIForceTouchCapability.Available && TARGET_OS_SIMULATOR != 1 {
                 let customDelegate = PeekPop3DTouchDelegate(delegate: delegate)
                 customDelegate.registerFor3DTouch(sourceView, viewController: viewController)
                 originalDelegate = customDelegate
                 return previewing
-                //&& TARGET_OS_SIMULATOR != 1
             }
         }
         let gestureRecognizer = PeekPopGestureRecognizer(target: self, action: "didPop")
@@ -64,8 +64,17 @@ public class PeekPop: NSObject {
     func peekPopAnimate(progress: Double, context: PreviewingContext?) {
         // If there aren't any screenshots, take them
         if peekPopView == nil {
+            if peekPopWindow == nil {
+                let window = UIWindow(frame: UIScreen.mainScreen().bounds)
+                window.windowLevel = UIWindowLevelAlert
+                window.rootViewController = UIViewController()
+                peekPopWindow = window
+            }
+            peekPopWindow?.alpha = 0.0
+            peekPopWindow?.hidden = false
+            peekPopWindow?.makeKeyAndVisible()
             let view = PeekPopView()
-            UIApplication.sharedApplication().windows.first?.subviews.first?.addSubview(view)
+            peekPopWindow?.addSubview(view)
             peekPopView = view
             peekPopView?.viewControllerScreenshot = viewController.view.screenshotView()
             if let targetViewController = targetViewController {
@@ -78,6 +87,9 @@ public class PeekPop: NSObject {
             }
             peekPopView?.frame = viewController.view.bounds
             peekPopView?.didAppear()
+            UIView.animateWithDuration(0.3, animations: { () -> Void in
+                self.peekPopWindow?.alpha = 1.0
+            })
         }
         else {
             peekPopView?.frame = viewController.view.bounds
@@ -100,8 +112,13 @@ public class PeekPop: NSObject {
     }
     
     func peekPopRelease() {
-        peekPopView?.removeFromSuperview()
-        peekPopView = nil
+        UIView.animateWithDuration(0.3, animations: { () -> Void in
+            self.peekPopWindow?.alpha = 0.0
+            }) { (finished) -> Void in
+                self.peekPopWindow?.hidden = true
+                self.peekPopView?.removeFromSuperview()
+                self.peekPopView = nil
+        }
     }
     
 }
