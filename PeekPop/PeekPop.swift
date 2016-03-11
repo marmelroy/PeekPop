@@ -46,10 +46,13 @@ public class PeekPop: NSObject {
         let gestureRecognizer = PeekPopGestureRecognizer(target: self, action: "didPop")
         gestureRecognizer.traitCollection = viewController.traitCollection
         gestureRecognizer.context = previewing
+        gestureRecognizer.cancelsTouchesInView = false
+        gestureRecognizer.delaysTouchesBegan = true
         viewController.view.addGestureRecognizer(gestureRecognizer)
         peekPopGestureRecognizer = gestureRecognizer
         return previewing
     }
+    
     
     /// Unregisters a view controller to participate with 3D Touch preview (peek) and commit (pop).
     public func unregisterForPreviewingWithContext(previewing: PreviewingContext) {

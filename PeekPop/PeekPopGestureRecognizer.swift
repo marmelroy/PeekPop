@@ -12,7 +12,7 @@ import UIKit.UIGestureRecognizerSubclass
 class PeekPopGestureRecognizer: UIGestureRecognizer
 {
     
-    var interpolationSpeed = 0.022
+    var interpolationSpeed = 0.02
 
     var target: PeekPop?
     
@@ -39,7 +39,7 @@ class PeekPopGestureRecognizer: UIGestureRecognizer
 
     override required init(target: AnyObject?, action: Selector)
     {
-        super.init(target: target, action: action)
+        super.init(target: nil, action: nil)
         if let peekPopTarget = target as? PeekPop {
             self.target = peekPopTarget
         }
@@ -47,20 +47,24 @@ class PeekPopGestureRecognizer: UIGestureRecognizer
     
     override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent)
     {
+        super.touchesBegan(touches, withEvent: event)
         if let touch = touches.first where isTouchValid(touch)
         {
             if #available(iOS 9.0, *) {
                 if traitCollection?.forceTouchCapability != UIForceTouchCapability.Available || TARGET_OS_SIMULATOR == 1 {
+                    self.state = .Possible
                     self.performSelector("delayedFirstTouch:", withObject: touch, afterDelay: 0.25)
                 }
             }
             else {
+                self.state = .Possible
                 self.performSelector("delayedFirstTouch:", withObject: touch, afterDelay: 0.25)
             }
         }
     }
     
     func delayedFirstTouch(touch: UITouch) {
+        self.state = .Began
         initialMajorRadius = touch.majorRadius
         longPress()
     }
@@ -107,6 +111,7 @@ class PeekPopGestureRecognizer: UIGestureRecognizer
     }
     
     private func cancelTouches() {
+        self.state = .Cancelled
         NSObject.cancelPreviousPerformRequestsWithTarget(self)
         if forceValue < 0.98 {
             targetForceValue = 0.0
