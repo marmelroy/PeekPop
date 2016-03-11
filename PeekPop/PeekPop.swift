@@ -17,6 +17,8 @@ public class PeekPop: NSObject {
     private var peekPopView: PeekPopView?
     private var previewingContexts = [PreviewingContext]()
     
+    var originalDelegate: PeekPop3DTouchDelegate?
+    
     /**
     Peek pop initializer
      
@@ -32,6 +34,15 @@ public class PeekPop: NSObject {
     public func registerForPreviewingWithDelegate(delegate: PeekPopPreviewingDelegate, sourceView: UIView) -> PreviewingContext {
         let previewing = PreviewingContext(delegate: delegate, sourceView: sourceView)
         previewingContexts.append(previewing)
+        if #available(iOS 9.0, *) {
+            if self.viewController.traitCollection.forceTouchCapability == UIForceTouchCapability.Available {
+                let customDelegate = PeekPop3DTouchDelegate(delegate: delegate)
+                customDelegate.registerFor3DTouch(sourceView, viewController: viewController)
+                originalDelegate = customDelegate
+                return previewing
+                //&& TARGET_OS_SIMULATOR != 1
+            }
+        }
         let gestureRecognizer = PeekPopGestureRecognizer(target: self, action: "didPop")
         gestureRecognizer.traitCollection = viewController.traitCollection
         gestureRecognizer.context = previewing
@@ -53,13 +64,13 @@ public class PeekPop: NSObject {
             let view = PeekPopView()
             UIApplication.sharedApplication().windows.first?.subviews.first?.addSubview(view)
             peekPopView = view
-            peekPopView?.viewControllerScreenshot = screenshotView(viewController.view)
+            peekPopView?.viewControllerScreenshot = viewController.view.screenshotView()
             if let targetViewController = targetViewController {
                 targetViewController.view.frame = viewController.view.bounds
-                peekPopView?.targetViewControllerScreenshot = screenshotView(targetViewController.view, inHierarchy: false)
+                peekPopView?.targetViewControllerScreenshot = targetViewController.view.screenshotView(false)
             }
             if let context = context {
-                peekPopView?.sourceViewScreenshot = screenshotView(context.sourceView)
+                peekPopView?.sourceViewScreenshot = context.sourceView.screenshotView()
                 peekPopView?.sourceViewRect = viewController.view.convertRect(context.sourceView.frame, toView: viewController.view)
             }
             peekPopView?.frame = viewController.view.bounds
@@ -90,26 +101,6 @@ public class PeekPop: NSObject {
         peekPopView = nil
     }
     
-    func screenshotView(view: UIView, inHierarchy: Bool = true) -> UIImage? {
-        UIGraphicsBeginImageContextWithOptions(view.layer.frame.size, false, UIScreen.mainScreen().scale);
-        if inHierarchy == true {
-            view.drawViewHierarchyInRect(view.bounds, afterScreenUpdates: false)
-        }
-        else {
-            if let context = UIGraphicsGetCurrentContext() {
-                view.layer.renderInContext(context)
-            }
-        }
-        if let image = UIGraphicsGetImageFromCurrentImageContext() {
-            UIGraphicsEndImageContext()
-            return image
-        }
-        UIGraphicsEndImageContext()
-        return nil
-    }
-
-    
-    
 }
 
 public struct PreviewingContext {
@@ -117,10 +108,6 @@ public struct PreviewingContext {
     public let sourceView: UIView
 }
 
-extension PreviewingContext: Equatable {}
-public func ==(lhs: PreviewingContext, rhs: PreviewingContext) -> Bool {
-    return lhs.sourceView == rhs.sourceView
-}
 
 public protocol PeekPopPreviewingDelegate {
     // If you return nil, a preview presentation will not be performed
