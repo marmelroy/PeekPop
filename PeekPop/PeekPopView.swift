@@ -107,7 +107,7 @@ class PeekPopView: UIView {
             }
             else if progress > 0.95{
                 targetPreviewView.frame = self.bounds
-                targetPreviewView.layer.cornerRadius = 0
+                targetPreviewView.imageContainer.layer.cornerRadius = 0
             }
             sourceImageView.hidden = true
         }

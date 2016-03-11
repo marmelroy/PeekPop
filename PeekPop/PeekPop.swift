@@ -107,14 +107,14 @@ public class PeekPop: NSObject {
             return
         }
         context.delegate.previewingContext(context, commitViewController: targetViewController)
-        peekPopGestureRecognizer?.resetValues()
-        self.performSelector("peekPopRelease", withObject: nil, afterDelay: 0.16)
+        peekPopRelease()
     }
     
     func peekPopRelease() {
         UIView.animateWithDuration(0.3, animations: { () -> Void in
             self.peekPopWindow?.alpha = 0.0
             }) { (finished) -> Void in
+                self.peekPopGestureRecognizer?.resetValues()
                 self.peekPopWindow?.hidden = true
                 self.peekPopView?.removeFromSuperview()
                 self.peekPopView = nil
