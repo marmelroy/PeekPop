@@ -12,9 +12,7 @@ import UIKit.UIGestureRecognizerSubclass
 class PeekPopGestureRecognizer: UIGestureRecognizer
 {
     
-    var thresholds = [0.33, 0.66, 1.0]
-    
-    var interpolationStep = 0.006
+    var interpolationSpeed = 0.022
 
     var target: PeekPop?
     
@@ -52,10 +50,7 @@ class PeekPopGestureRecognizer: UIGestureRecognizer
         if let touch = touches.first where isTouchValid(touch)
         {
             if #available(iOS 9.0, *) {
-                if traitCollection?.forceTouchCapability == UIForceTouchCapability.Available && TARGET_OS_SIMULATOR != 1 {
-                    handleTouch(touch)
-                }
-                else {
+                if traitCollection?.forceTouchCapability != UIForceTouchCapability.Available || TARGET_OS_SIMULATOR == 1 {
                     self.performSelector("delayedFirstTouch:", withObject: touch, afterDelay: 0.25)
                 }
             }
@@ -73,13 +68,10 @@ class PeekPopGestureRecognizer: UIGestureRecognizer
     override func touchesMoved(touches: Set<UITouch>, withEvent event: UIEvent)
     {
         super.touchesMoved(touches, withEvent: event)
-        if let touch = touches.first
+        if let touch = touches.first where isTouchValid(touch)
         {
             if #available(iOS 9.0, *) {
-                if traitCollection?.forceTouchCapability == UIForceTouchCapability.Available && TARGET_OS_SIMULATOR != 1 {
-                    handleTouch(touch)
-                }
-                else {
+                if traitCollection?.forceTouchCapability != UIForceTouchCapability.Available || TARGET_OS_SIMULATOR == 1 {
                     testMajorRadiusChange(touch.majorRadius)
                 }
             }
@@ -93,15 +85,8 @@ class PeekPopGestureRecognizer: UIGestureRecognizer
         guard let initialMajorRadius = initialMajorRadius else {
             return
         }
-        print("MAJOR RADIUS initial \(initialMajorRadius), current MAJOR \(majorRadius)")
-
         if initialMajorRadius/majorRadius < 0.5  {
-            print("hard")
-            interpolationStep = 0.03
-        }
-        else {
-            print("soft")
-            interpolationStep = 0.006
+            targetForceValue = 1.0
         }
     }
     
@@ -119,7 +104,6 @@ class PeekPopGestureRecognizer: UIGestureRecognizer
     func resetValues() {
         forceValue = 0.0
         currentThresholdIndex = 0
-        interpolationStep = 0.006
     }
     
     private func cancelTouches() {
@@ -127,15 +111,6 @@ class PeekPopGestureRecognizer: UIGestureRecognizer
         if forceValue < 0.98 {
             targetForceValue = 0.0
             currentThresholdIndex = 0
-        }
-    }
-    
-    private func handleTouch(touch: UITouch)
-    {
-        if #available(iOS 9.0, *) {
-            self.cancelTouches()
-            let forcePercentage = touch.force/touch.maximumPossibleForce
-            targetForceValue = Double(forcePercentage)
         }
     }
     
@@ -149,7 +124,7 @@ class PeekPopGestureRecognizer: UIGestureRecognizer
     }
     
     func longPress() {
-        targetForceValue = 0.99
+        targetForceValue = 0.66
     }
     
     func animateToTargetForce() {
@@ -161,13 +136,13 @@ class PeekPopGestureRecognizer: UIGestureRecognizer
     func updateForceToTarget() {
         let isIncrease = (forceValue < targetForceValue)
         if isIncrease {
-            forceValue = min(forceValue + interpolationStep, targetForceValue)
+            forceValue = min(forceValue + interpolationSpeed, targetForceValue)
             if forceValue >= targetForceValue {
                 displayLink?.invalidate()
             }
         }
         else {
-            forceValue = max(forceValue - interpolationStep*2, targetForceValue)
+            forceValue = max(forceValue - interpolationSpeed*2, targetForceValue)
             if forceValue <= targetForceValue {
                 forceValue = 0.0
                 displayLink?.invalidate()
