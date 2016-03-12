@@ -11,6 +11,7 @@ import Foundation
 extension UIView {
     
     func screenshotView(inHierarchy: Bool = true) -> UIImage? {
+        print("TAKE VIEW SCREENSHOT START \(NSDate())")
         UIGraphicsBeginImageContextWithOptions(self.layer.frame.size, false, UIScreen.mainScreen().scale);
         if inHierarchy == true {
             self.drawViewHierarchyInRect(self.bounds, afterScreenUpdates: false)
@@ -20,12 +21,10 @@ extension UIView {
                 self.layer.renderInContext(context)
             }
         }
-        if let image = UIGraphicsGetImageFromCurrentImageContext() {
-            UIGraphicsEndImageContext()
-            return image
-        }
+        let image = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
-        return nil
+        print("TAKE VIEW SCREENSHOT END \(NSDate())")
+        return image
     }
 
 }

@@ -47,16 +47,19 @@ class PeekPopGestureRecognizer: UIGestureRecognizer
     
     override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent)
     {
+        print("TOUCHES BEGAN")
         super.touchesBegan(touches, withEvent: event)
         if let touch = touches.first where isTouchValid(touch)
         {
             if #available(iOS 9.0, *) {
                 if traitCollection?.forceTouchCapability != UIForceTouchCapability.Available || TARGET_OS_SIMULATOR == 1 {
+                    target?.peekPopPrepare(context)
                     self.state = .Possible
                     self.performSelector("delayedFirstTouch:", withObject: touch, afterDelay: 0.25)
                 }
             }
             else {
+                target?.peekPopPrepare(context)
                 self.state = .Possible
                 self.performSelector("delayedFirstTouch:", withObject: touch, afterDelay: 0.25)
             }
@@ -64,6 +67,7 @@ class PeekPopGestureRecognizer: UIGestureRecognizer
     }
     
     func delayedFirstTouch(touch: UITouch) {
+        print("FIRST TOUCH")
         self.state = .Began
         initialMajorRadius = touch.majorRadius
         longPress()

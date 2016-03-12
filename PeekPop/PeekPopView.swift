@@ -32,7 +32,6 @@ class PeekPopView: UIView {
     var sourceImageView = UIImageView()
     var targetPreviewView = PeekPopTargetPreviewView()
 
-
     override init(frame: CGRect) {
         super.init(frame: frame)
         setup()
@@ -53,7 +52,7 @@ class PeekPopView: UIView {
         self.addSubview(blurredLowestLevel)
         self.addSubview(blurredImageViewFirst)
         self.addSubview(blurredImageViewSecond)
-        overlayView.backgroundColor = UIColor(white: 0.80, alpha: 0.5)
+        overlayView.backgroundColor = UIColor(white: 0.85, alpha: 0.5)
         self.addSubview(overlayView)
         self.addSubview(sourceImageView)
         self.addSubview(targetPreviewView)
@@ -70,11 +69,11 @@ class PeekPopView: UIView {
     
     func peekPopAnimate(progress: Double) {
         let adjustedProgress = min(progress*3,1.0)
-        let blur = adjustedProgress*5.0
+        let blur = adjustedProgress*3.0
         let blurIndex = Int(blur)
         let blurRemainder = blur - Double(blurIndex)
-        let adjustedScale: CGFloat = 1.0 - CGFloat(adjustedProgress)*0.02
-        let adjustedSourceImageScale: CGFloat = 1.0 + CGFloat(adjustedProgress)*0.02
+        let adjustedScale: CGFloat = 1.0 - CGFloat(adjustedProgress)*0.015
+        let adjustedSourceImageScale: CGFloat = 1.0 + CGFloat(adjustedProgress)*0.015
         blurredLowestLevel.image = blurredScreenshots.last
         blurredImageViewFirst.transform = CGAffineTransformMakeScale(adjustedScale, adjustedScale)
         blurredImageViewFirst.image = blurredScreenshots[blurIndex]
@@ -115,16 +114,18 @@ class PeekPopView: UIView {
     }
     
     func generateScreenshots() {
+        print("GENERATE SCREENSHOTS START \(NSDate())")
         guard let viewControllerScreenshot = viewControllerScreenshot else {
             return
         }
         blurredScreenshots.append(viewControllerScreenshot)
-        for i in 1...6 {
-            let radius: CGFloat = CGFloat(Double(i) * 6.0 / 6.0)
+        for i in 1...4 {
+            let radius: CGFloat = CGFloat(Double(i) * 8.0 / 4.0)
             if let blurredScreenshot = blurScreenshotWithRadius(radius) {
                 blurredScreenshots.append(blurredScreenshot)
             }
         }
+        print("GENERATE SCREENSHOTS END \(NSDate())")
     }
     
     func blurScreenshotWithRadius(radius: CGFloat) -> UIImage? {

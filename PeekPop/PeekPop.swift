@@ -61,9 +61,25 @@ public class PeekPop: NSObject {
         }
     }
     
+    func peekPopPrepare(context: PreviewingContext?){
+        let view = PeekPopView()
+        peekPopView = view
+        peekPopView?.viewControllerScreenshot = viewController.view.screenshotView()
+        if let targetViewController = targetViewController {
+            targetViewController.view.frame = viewController.view.bounds
+            peekPopView?.targetViewControllerScreenshot = targetViewController.view.screenshotView(false)
+        }
+        if let context = context {
+            peekPopView?.sourceViewScreenshot = context.sourceView.screenshotView()
+            peekPopView?.sourceViewRect = viewController.view.convertRect(context.sourceView.frame, toView: viewController.view)
+        }
+    }
+    
     func peekPopAnimate(progress: Double, context: PreviewingContext?) {
         // If there aren't any screenshots, take them
-        if peekPopView == nil {
+        print("ANIMATE PROGRESS \(progress)")
+        if peekPopView?.superview == nil {
+            print("ANIMATE SET UP START \(NSDate())")
             if peekPopWindow == nil {
                 let window = UIWindow(frame: UIScreen.mainScreen().bounds)
                 window.windowLevel = UIWindowLevelAlert
@@ -73,23 +89,15 @@ public class PeekPop: NSObject {
             peekPopWindow?.alpha = 0.0
             peekPopWindow?.hidden = false
             peekPopWindow?.makeKeyAndVisible()
-            let view = PeekPopView()
-            peekPopWindow?.addSubview(view)
-            peekPopView = view
-            peekPopView?.viewControllerScreenshot = viewController.view.screenshotView()
-            if let targetViewController = targetViewController {
-                targetViewController.view.frame = viewController.view.bounds
-                peekPopView?.targetViewControllerScreenshot = targetViewController.view.screenshotView(false)
-            }
-            if let context = context {
-                peekPopView?.sourceViewScreenshot = context.sourceView.screenshotView()
-                peekPopView?.sourceViewRect = viewController.view.convertRect(context.sourceView.frame, toView: viewController.view)
+            if let peekPopView = peekPopView {
+                peekPopWindow?.addSubview(peekPopView)
             }
             peekPopView?.frame = viewController.view.bounds
             peekPopView?.didAppear()
             UIView.animateWithDuration(0.2, animations: { () -> Void in
                 self.peekPopWindow?.alpha = 1.0
             })
+            print("ANIMATE SET UP END \(NSDate())")
         }
         else {
             peekPopView?.frame = viewController.view.bounds
