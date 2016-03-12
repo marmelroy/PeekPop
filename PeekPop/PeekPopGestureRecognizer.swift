@@ -14,11 +14,11 @@ class PeekPopGestureRecognizer: UIGestureRecognizer
     
     var interpolationSpeed = 0.02
 
-    var target: PeekPop?
+    let peekPopManager: PeekPopManager
     
     var forceValue: Double = 0.0 {
         didSet {
-            target?.peekPopAnimate(forceValue, context: context)
+            peekPopManager.peekPopAnimate(forceValue, context: context)
         }
     }
     
@@ -32,36 +32,30 @@ class PeekPopGestureRecognizer: UIGestureRecognizer
     
     var initialMajorRadius: CGFloat?
     
-    var traitCollection: UITraitCollection?
     var context: PreviewingContext?
     
     var displayLink: CADisplayLink?
-
-    override required init(target: AnyObject?, action: Selector)
-    {
+    
+    init(peekPop: PeekPop) {
+        self.peekPopManager = PeekPopManager(peekPop: peekPop)
         super.init(target: nil, action: nil)
-        if let peekPopTarget = target as? PeekPop {
-            self.target = peekPopTarget
-        }
     }
+
     
     override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent)
     {
         super.touchesBegan(touches, withEvent: event)
-        if let touch = touches.first where isTouchValid(touch)
+        if let touch = touches.first, context = context where isTouchValid(touch)
         {
-            if #available(iOS 9.0, *) {
-                if traitCollection?.forceTouchCapability != UIForceTouchCapability.Available || TARGET_OS_SIMULATOR == 1 {
-                    target?.peekPopPrepare(context)
-                    self.state = .Possible
-                    self.performSelector("delayedFirstTouch:", withObject: touch, afterDelay: 0.25)
-                }
+            let touchLocation = touch.locationInView(self.view)
+            let peekPopPossible = peekPopManager.peekPopPossible(context, touchLocation: touchLocation)
+            self.state = peekPopPossible ? .Possible : .Failed
+            if peekPopPossible {
+                self.performSelector("delayedFirstTouch:", withObject: touch, afterDelay: 0.2)
             }
-            else {
-                target?.peekPopPrepare(context)
-                self.state = .Possible
-                self.performSelector("delayedFirstTouch:", withObject: touch, afterDelay: 0.25)
-            }
+        }
+        else {
+            self.state = .Failed
         }
     }
     
@@ -76,14 +70,7 @@ class PeekPopGestureRecognizer: UIGestureRecognizer
         super.touchesMoved(touches, withEvent: event)
         if let touch = touches.first where isTouchValid(touch)
         {
-            if #available(iOS 9.0, *) {
-                if traitCollection?.forceTouchCapability != UIForceTouchCapability.Available || TARGET_OS_SIMULATOR == 1 {
-                    testMajorRadiusChange(touch.majorRadius)
-                }
-            }
-            else {
-                testMajorRadiusChange(touch.majorRadius)
-            }
+            testMajorRadiusChange(touch.majorRadius)
         }
     }
     
@@ -98,13 +85,13 @@ class PeekPopGestureRecognizer: UIGestureRecognizer
     
     override func touchesEnded(touches: Set<UITouch>, withEvent event: UIEvent)
     {
-        super.touchesEnded(touches, withEvent: event)
         self.cancelTouches()
+        super.touchesEnded(touches, withEvent: event)
     }
     
     override func touchesCancelled(touches: Set<UITouch>, withEvent event: UIEvent) {
-        super.touchesCancelled(touches, withEvent: event)
         self.cancelTouches()
+        super.touchesCancelled(touches, withEvent: event)
     }
     
     func resetValues() {
@@ -124,9 +111,6 @@ class PeekPopGestureRecognizer: UIGestureRecognizer
     func isTouchValid(touch: UITouch) -> Bool {
         let sourceRect = context?.sourceView.frame ?? CGRect.zero
         let touchLocation = touch.locationInView(self.view)
-        if let context = context {
-            target?.targetViewController = context.delegate.previewingContext(context, viewControllerForLocation: touchLocation)
-        }
         return CGRectContainsPoint(sourceRect, touchLocation)
     }
     
@@ -153,7 +137,7 @@ class PeekPopGestureRecognizer: UIGestureRecognizer
             if forceValue <= targetForceValue {
                 forceValue = 0.0
                 displayLink?.invalidate()
-                target?.peekPopRelease()
+                peekPopManager.peekPopRelease()
             }
         }
     }

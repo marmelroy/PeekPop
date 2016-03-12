@@ -1,5 +1,5 @@
 //
-//  PeekPop3DTouchDelegate.swift
+//  ForceTouchDelegate.swift
 //  PeekPop
 //
 //  Created by Roy Marmelstein on 11/03/2016.
@@ -9,7 +9,7 @@
 import Foundation
 
 
-class PeekPop3DTouchDelegate : NSObject, UIViewControllerPreviewingDelegate {
+class ForceTouchDelegate : NSObject, UIViewControllerPreviewingDelegate {
     
     let delegate: PeekPopPreviewingDelegate
     
