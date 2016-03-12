@@ -75,7 +75,7 @@ class PeekPopGestureRecognizer: UIGestureRecognizer
     
     func testForceChange(majorRadius: CGFloat) {
         if initialMajorRadius/majorRadius < 0.6  {
-            targetProgress = 1.0
+            targetProgress = 0.99
         }
     }
     
