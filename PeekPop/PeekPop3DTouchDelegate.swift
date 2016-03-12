@@ -19,8 +19,7 @@ class PeekPop3DTouchDelegate : NSObject, UIViewControllerPreviewingDelegate {
     
     func registerFor3DTouch(sourceView: UIView, viewController: UIViewController) {
         if #available(iOS 9.0, *) {
-            let previewingContext = viewController.registerForPreviewingWithDelegate(self, sourceView: sourceView)
-            print(previewingContext)
+            viewController.registerForPreviewingWithDelegate(self, sourceView: sourceView)
         }
     }
     

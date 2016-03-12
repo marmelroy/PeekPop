@@ -89,7 +89,6 @@ class PeekPopView: UIView {
         }
         else {
             if progress > 0.33 && progress < 0.45 {
-                print("progress \(progress)")
                 targetPreviewView.hidden = false
                 let targetAdjustedScale: CGFloat = min(CGFloat((progress - 0.34)/(0.44-0.34)), CGFloat(1.0))
                 let sourceViewCenter = CGPointMake(sourceViewRect.origin.x + sourceViewRect.size.width/2, sourceViewRect.origin.y + sourceViewRect.size.height/2)
@@ -114,7 +113,6 @@ class PeekPopView: UIView {
     }
     
     func generateScreenshots() {
-        print("GENERATE SCREENSHOTS START \(NSDate())")
         guard let viewControllerScreenshot = viewControllerScreenshot else {
             return
         }
@@ -125,7 +123,6 @@ class PeekPopView: UIView {
                 blurredScreenshots.append(blurredScreenshot)
             }
         }
-        print("GENERATE SCREENSHOTS END \(NSDate())")
     }
     
     func blurScreenshotWithRadius(radius: CGFloat) -> UIImage? {

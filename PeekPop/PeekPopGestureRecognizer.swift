@@ -47,7 +47,6 @@ class PeekPopGestureRecognizer: UIGestureRecognizer
     
     override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent)
     {
-        print("TOUCHES BEGAN")
         super.touchesBegan(touches, withEvent: event)
         if let touch = touches.first where isTouchValid(touch)
         {
@@ -67,7 +66,6 @@ class PeekPopGestureRecognizer: UIGestureRecognizer
     }
     
     func delayedFirstTouch(touch: UITouch) {
-        print("FIRST TOUCH")
         self.state = .Began
         initialMajorRadius = touch.majorRadius
         longPress()

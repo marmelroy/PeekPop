@@ -77,9 +77,7 @@ public class PeekPop: NSObject {
     
     func peekPopAnimate(progress: Double, context: PreviewingContext?) {
         // If there aren't any screenshots, take them
-        print("ANIMATE PROGRESS \(progress)")
         if peekPopView?.superview == nil {
-            print("ANIMATE SET UP START \(NSDate())")
             if peekPopWindow == nil {
                 let window = UIWindow(frame: UIScreen.mainScreen().bounds)
                 window.windowLevel = UIWindowLevelAlert
@@ -97,7 +95,6 @@ public class PeekPop: NSObject {
             UIView.animateWithDuration(0.2, animations: { () -> Void in
                 self.peekPopWindow?.alpha = 1.0
             })
-            print("ANIMATE SET UP END \(NSDate())")
         }
         else {
             peekPopView?.frame = viewController.view.bounds
