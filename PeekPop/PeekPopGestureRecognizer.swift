@@ -43,9 +43,8 @@ class PeekPopGestureRecognizer: UIGestureRecognizer
         if let touch = touches.first, context = context where isTouchValid(touch)
         {
             let touchLocation = touch.locationInView(self.view)
-            let peekPopPossible = peekPopManager.peekPopPossible(context, touchLocation: touchLocation)
-            self.state = peekPopPossible ? .Possible : .Failed
-            if peekPopPossible {
+            self.state = (context.delegate.previewingContext(context, viewControllerForLocation: touchLocation) != nil) ? .Possible : .Failed
+            if self.state == .Possible {
                 self.performSelector("delayedFirstTouch:", withObject: touch, afterDelay: 0.2)
             }
         }
@@ -66,6 +65,10 @@ class PeekPopGestureRecognizer: UIGestureRecognizer
     func delayedFirstTouch(touch: UITouch) {
         if isTouchValid(touch) {
             self.state = .Began
+            if let context = context {
+                let touchLocation = touch.locationInView(self.view)
+                peekPopManager.peekPopPossible(context, touchLocation: touchLocation)
+            }
             peekPopStarted = true
             initialMajorRadius = touch.majorRadius
             peekPopManager.peekPopBegan()

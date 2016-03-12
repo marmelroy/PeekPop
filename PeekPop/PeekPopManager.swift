@@ -39,7 +39,7 @@ class PeekPopManager {
         // Take view controller screenshot
         if let viewControllerScreenshot = viewController.view.screenshotView() {
             peekPopView?.viewControllerScreenshot = viewControllerScreenshot
-            peekPopView?.blurredScreenshots = generateBlurredScreenshots(viewControllerScreenshot)
+            peekPopView?.blurredScreenshots = self.generateBlurredScreenshots(viewControllerScreenshot)
         }
         
         // Take source view screenshot
@@ -57,8 +57,8 @@ class PeekPopManager {
     func generateBlurredScreenshots(image: UIImage) -> [UIImage] {
         var images = [UIImage]()
         images.append(image)
-        for i in 1...4 {
-            let radius: CGFloat = CGFloat(Double(i) * 8.0 / 4.0)
+        for i in 1...3 {
+            let radius: CGFloat = CGFloat(Double(i) * 8.0 / 3.0)
             if let blurredScreenshot = blurImageWithRadius(image, radius: radius) {
                 images.append(blurredScreenshot)
             }
