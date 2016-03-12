@@ -37,7 +37,10 @@ class PeekPopManager {
         peekPopView = view
         
         // Take view controller screenshot
-        peekPopView?.viewControllerScreenshot = viewController.view.screenshotView()
+        if let viewControllerScreenshot = viewController.view.screenshotView() {
+            peekPopView?.viewControllerScreenshot = viewControllerScreenshot
+            peekPopView?.blurredScreenshots = generateBlurredScreenshots(viewControllerScreenshot)
+        }
         
         // Take source view screenshot
         peekPopView?.sourceViewScreenshot = context.sourceView.screenshotView()
@@ -50,6 +53,23 @@ class PeekPopManager {
         
         return true
     }
+    
+    func generateBlurredScreenshots(image: UIImage) -> [UIImage] {
+        var images = [UIImage]()
+        images.append(image)
+        for i in 1...4 {
+            let radius: CGFloat = CGFloat(Double(i) * 8.0 / 4.0)
+            if let blurredScreenshot = blurImageWithRadius(image, radius: radius) {
+                images.append(blurredScreenshot)
+            }
+        }
+        return images
+    }
+    
+    func blurImageWithRadius(image: UIImage, radius: CGFloat) -> UIImage? {
+        return image.applyBlurWithRadius(CGFloat(radius), tintColor: nil, saturationDeltaFactor: 1.0, maskImage: nil)
+    }
+
     
     /// Add window to heirarchy when peek pop begins
     func peekPopBegan() {
@@ -86,7 +106,7 @@ class PeekPopManager {
      - parameter context:  PreviewingContext
      */
     func animateProgressForContext(progress: CGFloat, context: PreviewingContext?) {
-        (progress < 0.99) ? peekPopView?.peekPopAnimate(progress) : commitTarget(context)
+        (progress < 0.99) ? peekPopView?.animateProgress(progress) : commitTarget(context)
     }
     
     /**
