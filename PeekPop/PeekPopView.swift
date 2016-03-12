@@ -90,8 +90,9 @@ class PeekPopView: UIView {
         }
         else {
             if progress > 0.33 && progress < 0.45 {
+                print("progress \(progress)")
                 targetPreviewView.hidden = false
-                let targetAdjustedScale: CGFloat = min(CGFloat((progress - 0.33)/(0.45-0.33)), CGFloat(1.0))
+                let targetAdjustedScale: CGFloat = min(CGFloat((progress - 0.34)/(0.44-0.34)), CGFloat(1.0))
                 let sourceViewCenter = CGPointMake(sourceViewRect.origin.x + sourceViewRect.size.width/2, sourceViewRect.origin.y + sourceViewRect.size.height/2)
                 let originXDelta = self.bounds.size.width/2 - sourceViewCenter.x
                 let originYDelta = self.bounds.size.height/2 - sourceViewCenter.y
@@ -101,11 +102,11 @@ class PeekPopView: UIView {
                 targetPreviewView.frame.size = CGSizeMake(sourceViewRect.size.width + widthDelta*targetAdjustedScale, sourceViewRect.size.height + heightDelta*targetAdjustedScale)
                 targetPreviewView.center = CGPointMake(sourceViewCenter.x + originXDelta*targetAdjustedScale, sourceViewCenter.y + originYDelta*targetAdjustedScale)
             }
-            else if progress > 0.45 && progress < 0.95 {
+            else if progress > 0.45 && progress < 0.96 {
                 let targetAdjustedScale = min(CGFloat(1 + (progress-0.66)/6),1.1)
                 targetPreviewView.transform = CGAffineTransformMakeScale(targetAdjustedScale, targetAdjustedScale)
             }
-            else if progress > 0.95{
+            else if progress > 0.96{
                 targetPreviewView.frame = self.bounds
                 targetPreviewView.imageContainer.layer.cornerRadius = 0
             }

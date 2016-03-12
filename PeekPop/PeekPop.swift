@@ -87,7 +87,7 @@ public class PeekPop: NSObject {
             }
             peekPopView?.frame = viewController.view.bounds
             peekPopView?.didAppear()
-            UIView.animateWithDuration(0.3, animations: { () -> Void in
+            UIView.animateWithDuration(0.2, animations: { () -> Void in
                 self.peekPopWindow?.alpha = 1.0
             })
         }
@@ -111,7 +111,7 @@ public class PeekPop: NSObject {
     }
     
     func peekPopRelease() {
-        UIView.animateWithDuration(0.3, animations: { () -> Void in
+        UIView.animateWithDuration(0.2, animations: { () -> Void in
             self.peekPopWindow?.alpha = 0.0
             }) { (finished) -> Void in
                 self.peekPopGestureRecognizer?.resetValues()
