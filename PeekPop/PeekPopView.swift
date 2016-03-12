@@ -67,11 +67,11 @@ class PeekPopView: UIView {
         sourceImageView.frame = sourceViewRect
     }
     
-    func peekPopAnimate(progress: Double) {
+    func peekPopAnimate(progress: CGFloat) {
         let adjustedProgress = min(progress*3,1.0)
         let blur = adjustedProgress*3.0
         let blurIndex = Int(blur)
-        let blurRemainder = blur - Double(blurIndex)
+        let blurRemainder = blur - CGFloat(blurIndex)
         let adjustedScale: CGFloat = 1.0 - CGFloat(adjustedProgress)*0.015
         let adjustedSourceImageScale: CGFloat = 1.0 + CGFloat(adjustedProgress)*0.015
         blurredLowestLevel.image = blurredScreenshots.last

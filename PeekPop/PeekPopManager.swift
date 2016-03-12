@@ -22,6 +22,9 @@ class PeekPopManager {
         self.peekPop = peekPop
     }
     
+    //MARK: PeekPop
+    
+    /// Prepare peek pop view if peek and pop gesture is possible
     func peekPopPossible(context: PreviewingContext, touchLocation: CGPoint) -> Bool {
         
         // Return early if no target view controller is provided by delegate method
@@ -48,47 +51,63 @@ class PeekPopManager {
         return true
     }
     
-    func peekPopAnimate(progress: Double, context: PreviewingContext?) {
-        // If there aren't any screenshots, take them
-        if peekPopView?.superview == nil {
-            if peekPopWindow == nil {
-                let window = UIWindow(frame: UIScreen.mainScreen().bounds)
-                window.windowLevel = UIWindowLevelAlert
-                window.rootViewController = UIViewController()
-                peekPopWindow = window
-            }
-            peekPopWindow?.alpha = 0.0
-            peekPopWindow?.hidden = false
-            peekPopWindow?.makeKeyAndVisible()
-            if let peekPopView = peekPopView {
-                peekPopWindow?.addSubview(peekPopView)
-            }
-            peekPopView?.frame = viewController.view.bounds
-            peekPopView?.didAppear()
-            UIView.animateWithDuration(0.2, animations: { () -> Void in
-                self.peekPopWindow?.alpha = 1.0
-            })
+    /// Add window to heirarchy when peek pop begins
+    func peekPopBegan() {
+        
+        // Create window if it doesn't already exist
+        if peekPopWindow == nil {
+            let window = UIWindow(frame: UIScreen.mainScreen().bounds)
+            window.windowLevel = UIWindowLevelAlert
+            window.rootViewController = UIViewController()
+            peekPopWindow = window
         }
-        else {
-            peekPopView?.frame = viewController.view.bounds
+        
+        peekPopWindow?.alpha = 0.0
+        peekPopWindow?.hidden = false
+        peekPopWindow?.makeKeyAndVisible()
+        
+        if let peekPopView = peekPopView {
+            peekPopWindow?.addSubview(peekPopView)
         }
-        if progress < 0.99 {
-            peekPopView?.peekPopAnimate(progress)
-        }
-        else {
-            self.triggerTarget(context!)
-        }
+        
+        peekPopView?.frame = viewController.view.bounds
+        peekPopView?.didAppear()
+        
+        UIView.animateWithDuration(0.2, animations: { () -> Void in
+            self.peekPopWindow?.alpha = 1.0
+        })
+        
     }
     
-    func triggerTarget(context: PreviewingContext){
-        guard let targetViewController = targetViewController else {
+    /**
+     Animated progress for context
+     
+     - parameter progress: A value between 0.0 and 1.0
+     - parameter context:  PreviewingContext
+     */
+    func animateProgressForContext(progress: CGFloat, context: PreviewingContext?) {
+        (progress < 0.99) ? peekPopView?.peekPopAnimate(progress) : commitTarget(context)
+    }
+    
+    /**
+     Commit target.
+     
+     - parameter context: PreviewingContext
+     */
+    func commitTarget(context: PreviewingContext?){
+        guard let targetViewController = targetViewController, context = context else {
             return
         }
         context.delegate.previewingContext(context, commitViewController: targetViewController)
-        peekPopRelease()
+        peekPopEnded()
     }
     
-    func peekPopRelease() {
+    /**
+     Peek pop ended
+     
+     - parameter animated: whether or not window removal should be animated
+     */
+    func peekPopEnded() {
         UIView.animateWithDuration(0.2, animations: { () -> Void in
             self.peekPopWindow?.alpha = 0.0
             }) { (finished) -> Void in

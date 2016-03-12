@@ -12,17 +12,17 @@ import UIKit.UIGestureRecognizerSubclass
 class PeekPopGestureRecognizer: UIGestureRecognizer
 {
     
-    var interpolationSpeed = 0.02
+    var interpolationSpeed: CGFloat = 0.02
 
     let peekPopManager: PeekPopManager
     
-    var forceValue: Double = 0.0 {
+    var forceValue: CGFloat = 0.0 {
         didSet {
-            peekPopManager.peekPopAnimate(forceValue, context: context)
+            peekPopManager.animateProgressForContext(forceValue, context: context)
         }
     }
     
-    var targetForceValue: Double = 0.0 {
+    var targetForceValue: CGFloat = 0.0 {
         didSet {
             animateToTargetForce()
         }
@@ -115,6 +115,7 @@ class PeekPopGestureRecognizer: UIGestureRecognizer
     }
     
     func longPress() {
+        peekPopManager.peekPopBegan()
         targetForceValue = 0.66
     }
     
@@ -137,7 +138,7 @@ class PeekPopGestureRecognizer: UIGestureRecognizer
             if forceValue <= targetForceValue {
                 forceValue = 0.0
                 displayLink?.invalidate()
-                peekPopManager.peekPopRelease()
+                peekPopManager.peekPopEnded()
             }
         }
     }
