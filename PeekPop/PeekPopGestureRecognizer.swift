@@ -8,39 +8,34 @@
 
 import UIKit.UIGestureRecognizerSubclass
 
-
 class PeekPopGestureRecognizer: UIGestureRecognizer
 {
     
-    var interpolationSpeed: CGFloat = 0.02
-
+    var context: PreviewingContext?
     let peekPopManager: PeekPopManager
     
-    var forceValue: CGFloat = 0.0 {
-        didSet {
-            peekPopManager.animateProgressForContext(forceValue, context: context)
-        }
+    let interpolationSpeed: CGFloat = 0.02
+    let previewThreshold: CGFloat = 0.66
+    let commitThreshold: CGFloat = 0.99
+    
+    var progress: CGFloat = 0.0
+    var targetProgress: CGFloat = 0.0 {
+        didSet { updateProgress() }
     }
     
-    var targetForceValue: CGFloat = 0.0 {
-        didSet {
-            animateToTargetForce()
-        }
-    }
-
-    var currentThresholdIndex = 0
-    
-    var initialMajorRadius: CGFloat?
-    
-    var context: PreviewingContext?
-    
+    var initialMajorRadius: CGFloat = 0.0
     var displayLink: CADisplayLink?
+    
+    var peekPopStarted = false
+    
+    //MARK: Lifecycle
     
     init(peekPop: PeekPop) {
         self.peekPopManager = PeekPopManager(peekPop: peekPop)
         super.init(target: nil, action: nil)
     }
-
+    
+    //MARK: Touch handling
     
     override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent)
     {
@@ -59,27 +54,28 @@ class PeekPopGestureRecognizer: UIGestureRecognizer
         }
     }
     
-    func delayedFirstTouch(touch: UITouch) {
-        self.state = .Began
-        initialMajorRadius = touch.majorRadius
-        longPress()
-    }
-    
     override func touchesMoved(touches: Set<UITouch>, withEvent event: UIEvent)
     {
         super.touchesMoved(touches, withEvent: event)
-        if let touch = touches.first where isTouchValid(touch)
+        if let touch = touches.first where peekPopStarted == true
         {
-            testMajorRadiusChange(touch.majorRadius)
+            testForceChange(touch.majorRadius)
         }
     }
     
-    func testMajorRadiusChange(majorRadius: CGFloat) {
-        guard let initialMajorRadius = initialMajorRadius else {
-            return
+    func delayedFirstTouch(touch: UITouch) {
+        if isTouchValid(touch) {
+            self.state = .Began
+            peekPopStarted = true
+            initialMajorRadius = touch.majorRadius
+            peekPopManager.peekPopBegan()
+            targetProgress = previewThreshold
         }
-        if initialMajorRadius/majorRadius < 0.5  {
-            targetForceValue = 1.0
+    }
+    
+    func testForceChange(majorRadius: CGFloat) {
+        if initialMajorRadius/majorRadius < 0.6  {
+            targetProgress = 1.0
         }
     }
     
@@ -95,16 +91,17 @@ class PeekPopGestureRecognizer: UIGestureRecognizer
     }
     
     func resetValues() {
-        forceValue = 0.0
-        currentThresholdIndex = 0
+        NSObject.cancelPreviousPerformRequestsWithTarget(self)
+        peekPopStarted = false
+        progress = 0.0
     }
     
     private func cancelTouches() {
         self.state = .Cancelled
+        peekPopStarted = false
         NSObject.cancelPreviousPerformRequestsWithTarget(self)
-        if forceValue < 0.98 {
-            targetForceValue = 0.0
-            currentThresholdIndex = 0
+        if progress < commitThreshold {
+            targetProgress = 0.0
         }
     }
     
@@ -114,33 +111,28 @@ class PeekPopGestureRecognizer: UIGestureRecognizer
         return CGRectContainsPoint(sourceRect, touchLocation)
     }
     
-    func longPress() {
-        peekPopManager.peekPopBegan()
-        targetForceValue = 0.66
-    }
-    
-    func animateToTargetForce() {
+    func updateProgress() {
         displayLink?.invalidate()
-        displayLink = CADisplayLink(target: self, selector: "updateForceToTarget")
+        displayLink = CADisplayLink(target: self, selector: "animateToTargetProgress")
         displayLink?.addToRunLoop(NSRunLoop.mainRunLoop(), forMode: NSRunLoopCommonModes)
     }
     
-    func updateForceToTarget() {
-        let isIncrease = (forceValue < targetForceValue)
-        if isIncrease {
-            forceValue = min(forceValue + interpolationSpeed, targetForceValue)
-            if forceValue >= targetForceValue {
+    func animateToTargetProgress() {
+        if progress < targetProgress {
+            progress = min(progress + interpolationSpeed, targetProgress)
+            if progress >= targetProgress {
                 displayLink?.invalidate()
             }
         }
         else {
-            forceValue = max(forceValue - interpolationSpeed*2, targetForceValue)
-            if forceValue <= targetForceValue {
-                forceValue = 0.0
+            progress = max(progress - interpolationSpeed*2, targetProgress)
+            if progress <= targetProgress {
+                progress = 0.0
                 displayLink?.invalidate()
                 peekPopManager.peekPopEnded()
             }
         }
+        peekPopManager.animateProgressForContext(progress, context: context)
     }
     
 }
