@@ -94,8 +94,8 @@ class PeekPopView: UIView {
                 let sourceViewCenter = CGPointMake(sourceViewRect.origin.x + sourceViewRect.size.width/2, sourceViewRect.origin.y + sourceViewRect.size.height/2)
                 let originXDelta = self.bounds.size.width/2 - sourceViewCenter.x
                 let originYDelta = self.bounds.size.height/2 - sourceViewCenter.y
-                let widthDelta = self.bounds.size.width - 32 - sourceViewRect.size.width
-                let heightDelta = self.bounds.size.height - 120 - sourceViewRect.size.height
+                let widthDelta = self.bounds.size.width - 28 - sourceViewRect.size.width
+                let heightDelta = self.bounds.size.height - 140 - sourceViewRect.size.height
                 targetPreviewView.imageView.image = targetViewControllerScreenshot
                 targetPreviewView.frame.size = CGSizeMake(sourceViewRect.size.width + widthDelta*targetAdjustedScale, sourceViewRect.size.height + heightDelta*targetAdjustedScale)
                 targetPreviewView.center = CGPointMake(sourceViewCenter.x + originXDelta*targetAdjustedScale, sourceViewCenter.y + originYDelta*targetAdjustedScale)
@@ -157,7 +157,7 @@ class PeekPopTargetPreviewView: UIView {
     
     func setup() {
         self.addSubview(imageContainer)
-        imageContainer.layer.cornerRadius = 20
+        imageContainer.layer.cornerRadius = 15
         imageContainer.clipsToBounds = true
         imageContainer.addSubview(imageView)
     }
