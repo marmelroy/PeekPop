@@ -26,7 +26,10 @@ class ForceTouchDelegate : NSObject, UIViewControllerPreviewingDelegate {
     @objc func previewingContext(previewingContext: UIViewControllerPreviewing, viewControllerForLocation location: CGPoint) -> UIViewController? {
         if #available(iOS 9.0, *) {
             let context = PreviewingContext(delegate: delegate, sourceView: previewingContext.sourceView)
-            return delegate.previewingContext(context, viewControllerForLocation: location)
+            let viewController = delegate.previewingContext(context, viewControllerForLocation: location)
+            // Apply changes to previewing context's source rect
+            previewingContext.sourceRect = context.sourceRect
+            return viewController
         }
         return nil
     }
