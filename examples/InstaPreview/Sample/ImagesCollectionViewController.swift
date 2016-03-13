@@ -68,15 +68,15 @@ class ImagesCollectionViewController: UICollectionViewController, UICollectionVi
                     previewingContext.sourceRect = layoutAttributes.frame
                 }
                 previewViewController.image = selectedImage
+                return previewViewController
             }
 
-            return previewViewController
         }
         return nil
     }
     
     func previewingContext(previewingContext: PreviewingContext, commitViewController viewControllerToCommit: UIViewController) {
-        self.navigationController?.pushViewController(viewControllerToCommit, animated: true)
+        self.navigationController?.pushViewController(viewControllerToCommit, animated: false)
     }
 
     
