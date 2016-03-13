@@ -43,9 +43,10 @@ class PeekPopManager {
         }
         
         // Take source view screenshot
-        peekPopView?.sourceViewScreenshot = context.sourceView.screenshotView()
-        peekPopView?.sourceViewRect = viewController.view.convertRect(context.sourceView.frame, toView: viewController.view)
-        
+        let rect = viewController.view.convertRect(context.sourceRect, fromView: context.sourceView)
+        peekPopView?.sourceViewScreenshot = context.sourceView.screenshotView(true, rect: context.sourceRect)
+        peekPopView?.sourceViewRect = rect
+
         // Take target view controller screenshot
         targetVC.view.frame = viewController.view.bounds
         peekPopView?.targetViewControllerScreenshot = targetVC.view.screenshotView(false)

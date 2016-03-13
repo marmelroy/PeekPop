@@ -176,6 +176,3 @@ class PeekPopTargetPreviewView: UIView {
         imageContainer.addSubview(imageView)
     }
 }
-
-
-

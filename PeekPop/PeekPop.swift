@@ -51,20 +51,13 @@ public class PeekPop: NSObject {
             gestureRecognizer.context = previewing
             gestureRecognizer.cancelsTouchesInView = false
             gestureRecognizer.delaysTouchesBegan = true
-            viewController.view.addGestureRecognizer(gestureRecognizer)
+            sourceView.addGestureRecognizer(gestureRecognizer)
             peekPopGestureRecognizer = gestureRecognizer
         }
         
         return previewing
     }
-    
-    /// Unregisters a view controller to participate with 3D Touch preview (peek) and commit (pop).
-    public func unregisterForPreviewingWithContext(previewing: PreviewingContext) {
-        if let contextIndex = previewingContexts.indexOf(previewing) {
-            previewingContexts.removeAtIndex(contextIndex)
-        }
-    }
-    
+        
     /// Check whether force touch is available
     func isForceTouchCapable() -> Bool {
         if #available(iOS 9.0, *) {
@@ -76,11 +69,19 @@ public class PeekPop: NSObject {
 }
 
 /// Previewing context struct
-public struct PreviewingContext {
+public class PreviewingContext {
     /// Previewing delegate
     public let delegate: PeekPopPreviewingDelegate
     /// Source view
     public let sourceView: UIView
+    /// Source rect
+    public var sourceRect: CGRect
+    
+    init(delegate: PeekPopPreviewingDelegate, sourceView: UIView) {
+        self.delegate = delegate
+        self.sourceView = sourceView
+        self.sourceRect = sourceView.frame
+    }
 }
 
 

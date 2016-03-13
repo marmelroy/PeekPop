@@ -10,7 +10,7 @@ import Foundation
 
 extension UIView {
     
-    func screenshotView(inHierarchy: Bool = true) -> UIImage? {
+    func screenshotView(inHierarchy: Bool = true, rect: CGRect? = nil) -> UIImage? {
         UIGraphicsBeginImageContextWithOptions(self.layer.frame.size, false, UIScreen.mainScreen().scale);
         if inHierarchy == true {
             self.drawViewHierarchyInRect(self.bounds, afterScreenUpdates: false)
@@ -21,8 +21,14 @@ extension UIView {
             }
         }
         let image = UIGraphicsGetImageFromCurrentImageContext()
-        UIGraphicsEndImageContext()
-        return image
+        let rectTransform = CGAffineTransformMakeScale(image.scale, image.scale)
+        if let rect = rect, let croppedImageRef = CGImageCreateWithImageInRect(image.CGImage, CGRectApplyAffineTransform(rect, rectTransform)) {
+            return UIImage(CGImage: croppedImageRef)
+        }
+        else {
+            UIGraphicsEndImageContext()
+            return image
+        }
     }
 
 }
