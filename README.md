@@ -17,6 +17,7 @@ Peek and Pop is a phenomenal iOS feature introduced with iPhone 6S and 6S+ that 
 :point_up_2: | Pressure-sensitive tap recognition for older devices.
 :heartpulse: | Faithful recreation of the peek and pop animation on older devices. 
 :iphone: | Almost identical API to Apple's.
+:eight: | Runs on all iOS8+ devices.
 
 Missing features:
 - Support for peek and pop preview actions in devices that don't have 3D touch. 
@@ -42,7 +43,7 @@ class MyViewController: UIViewController, PeekPopPreviewingDelegate {
     }
 ```
 
-PeekPopPreviewingDelegate requires two simple functions. You will need to tell it what view controller to present for peeking purposes with: 
+PeekPopPreviewingDelegate requires implementing two simple functions. You will need to tell it what view controller to present for peeking purposes with: 
 ```swift
     func previewingContext(previewingContext: PreviewingContext, viewControllerForLocation location: CGPoint) -> UIViewController?
 ```
@@ -54,7 +55,9 @@ PeekPopPreviewingDelegate requires two simple functions. You will need to tell i
 
 ## How does it work? 
 
-In devices without 3D touch, PeekPop recognizes pressure on the screen by monitoring significant changes in UITouch's majorRadius value. It assumes that by pressing harder on your iPhone, more of the surface area of your finger is in contact with the screen. This is true in the majority of cases. 
+In devices without 3D touch, PeekPop recognizes pressure on the screen by monitoring significant changes in UITouch's majorRadius value. 
+
+It assumes that by pressing harder on your iPhone, more of the surface area of your finger is in contact with the screen. This is true in the majority of cases. 
 
 ### Setting up with [CocoaPods](http://cocoapods.org/?q=PeekPop)
 ```ruby
