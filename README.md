@@ -29,7 +29,7 @@ Import PeekPop at the top of the Swift file.
 import PeekPop
 ```
 
-Create a PeekPop object and register your object for handling the peek by specifying the source view. You will also need to declare that your object will conform to the PeekPopPreviewingDelegate protocol.
+Create a PeekPop object, register your view controller for handling the peek and specify the source view. You will also need to declare that your view controller will conform to the PeekPopPreviewingDelegate protocol.
 
 ```swift
 class MyViewController: UIViewController, PeekPopPreviewingDelegate {
@@ -56,11 +56,6 @@ PeekPopPreviewingDelegate requires two simple functions. You will need to tell i
 
 In devices without 3D touch, PeekPop recognizes pressure on the screen by monitoring significant changes in UITouch's majorRadius value. It assumes that by pressing harder on your iPhone, more of the surface area of your finger is in contact with the screen. This is true in the majority of cases. 
 
-## Inspiration
-- [http://krakendev.io/peek-pop/](http://krakendev.io/peek-pop/)
-- [http://flexmonkey.blogspot.fr/2015/10/the-plum-o-meter-weighing-plums-using.html](http://flexmonkey.blogspot.fr/2015/10/the-plum-o-meter-weighing-plums-using.html)
-- [https://github.com/b3ll/Pseudo3DTouch](https://github.com/b3ll/Pseudo3DTouch)
-
 ### Setting up with [CocoaPods](http://cocoapods.org/?q=PeekPop)
 ```ruby
 source 'https://github.com/CocoaPods/Specs.git'
@@ -83,3 +78,9 @@ To integrate PeekPop into your Xcode project using Carthage, specify it in your 
 ```ogdl
 github "marmelroy/PeekPop"
 ```
+
+## Inspiration
+- [http://krakendev.io/peek-pop/](http://krakendev.io/peek-pop/)
+- [http://flexmonkey.blogspot.fr/2015/10/the-plum-o-meter-weighing-plums-using.html](http://flexmonkey.blogspot.fr/2015/10/the-plum-o-meter-weighing-plums-using.html)
+- [https://github.com/b3ll/Pseudo3DTouch](https://github.com/b3ll/Pseudo3DTouch)
+
