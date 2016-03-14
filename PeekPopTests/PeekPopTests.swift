@@ -11,26 +11,34 @@ import XCTest
 
 class PeekPopTests: XCTestCase {
     
-    override func setUp() {
-        super.setUp()
-        // Put setup code here. This method is called before the invocation of each test method in the class.
+    func testGestureRecognizerProgressIncreases() {
+        let fakeViewController = UIViewController()
+        let peekPop = PeekPop(viewController: fakeViewController)
+        let peekPopGestureRecognizer = PeekPopGestureRecognizer(peekPop: peekPop)
+        peekPopGestureRecognizer.progress = 0.0
+        peekPopGestureRecognizer.targetProgress = 1.0
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), {
+            sleep(2)
+            dispatch_sync(dispatch_get_main_queue(), {
+                XCTAssertEqual(peekPopGestureRecognizer.progress, 1.0)
+            })
+        })
     }
     
-    override func tearDown() {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
-        super.tearDown()
+    func testGestureRecognizerProgressDecrease() {
+        let fakeViewController = UIViewController()
+        let peekPop = PeekPop(viewController: fakeViewController)
+        let peekPopGestureRecognizer = PeekPopGestureRecognizer(peekPop: peekPop)
+        peekPopGestureRecognizer.progress = 1.0
+        peekPopGestureRecognizer.targetProgress = 0.0
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), {
+            sleep(2)
+            dispatch_sync(dispatch_get_main_queue(), {
+                XCTAssertEqual(peekPopGestureRecognizer.progress, 0.0)
+            })
+        })
     }
+
     
-    func testExample() {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
-    }
-    
-    func testPerformanceExample() {
-        // This is an example of a performance test case.
-        self.measureBlock {
-            // Put the code you want to measure the time of here.
-        }
-    }
     
 }

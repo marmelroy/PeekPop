@@ -8,8 +8,8 @@
 
 import Foundation
 
-
-class ForceTouchDelegate : NSObject, UIViewControllerPreviewingDelegate {
+/// This delegate is used as a way to fallback to Apple's implementation of Peek and Pop for devices that support 3D touch. It conforms to UIViewControllerPreviewingDelegate
+class ForceTouchDelegate: NSObject, UIViewControllerPreviewingDelegate {
     
     let delegate: PeekPopPreviewingDelegate
     
