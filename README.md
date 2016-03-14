@@ -4,7 +4,7 @@
 [![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
 
 # PeekPop
-Peek and Pop is a phenomenal iOS feature introduced with iPhone 6S but 6S+ that allows you to easily preview content. Sadly, almost 80% of users are on older devices. PeekPop is a Swift framework that brings backwards-compatability to Peek and Pop.  
+Peek and Pop is a phenomenal iOS feature introduced with iPhone 6S and 6S+ that allows you to easily preview content. Sadly, almost 80% of users are on older devices. PeekPop is a Swift framework that brings backwards-compatibility to Peek and Pop.  
 
 <p align="center"><img src="http://i.giphy.com/3o7ablu0adICfQ3OXC.gif" width="242" height="425"/></p>
 
@@ -13,10 +13,10 @@ Peek and Pop is a phenomenal iOS feature introduced with iPhone 6S but 6S+ that 
 
               |  Features
 --------------------------|------------------------------------------------------------
-:star2: | Apple's beautiful peek and pop for devices with 3D touch.
+:star2: | Uses Apple's beautiful peek and pop interaction for devices with 3D touch.
 :point_up_2: | Pressure-sensitive tap recognition for older devices.
 :heartpulse: | Faithful recreation of the peek and pop animation on older devices. 
-:iphone: | Almost identical API to Apple's peek and pop implementation.
+:iphone: | Almost identical API to Apple's.
 
 Missing features:
 - Support for peek and pop preview actions in devices that don't have 3D touch. 
@@ -29,7 +29,7 @@ Import PeekPop at the top of the Swift file.
 import PeekPop
 ```
 
-Create a PeekPop object. Register your object for handling the peek and specify the source view. You will also need to declare that your object will conform to the PeekPopPreviewingDelegate protocol.
+Create a PeekPop object and register your object for handling the peek by specifying the source view. You will also need to declare that your object will conform to the PeekPopPreviewingDelegate protocol.
 
 ```swift
 class MyViewController: UIViewController, PeekPopPreviewingDelegate {
@@ -42,14 +42,12 @@ class MyViewController: UIViewController, PeekPopPreviewingDelegate {
     }
 ```
 
-PeekPopPreviewingDelegate requires two simple functions. 
-
-Return a view controller to present for peeking purposes with: 
+PeekPopPreviewingDelegate requires two simple functions. You will need to tell it what view controller to present for peeking purposes with: 
 ```swift
     func previewingContext(previewingContext: PreviewingContext, viewControllerForLocation location: CGPoint) -> UIViewController?
 ```
 
-Commit the preview view controller at the end of the transition with: 
+.. and you will need to tell it how to commit the preview view controller at the end of the transition with: 
 ```swift
     func previewingContext(previewingContext: PreviewingContext, commitViewController viewControllerToCommit: UIViewController)
 ```
