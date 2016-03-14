@@ -4,7 +4,7 @@
 [![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
 
 # PeekPop
-Peek and Pop is a phenomenal iOS feature introduced with iPhone 6S and 6S+ that allows you to easily preview content. Sadly, almost 80% of users are on older devices. PeekPop is a Swift framework that brings backwards-compatibility to Peek and Pop.  
+Peek and Pop is a phenomenal iOS feature introduced with iPhone 6S and 6S+ that allows you to easily preview content with 3D touch. Sadly, almost 80% of users are on older devices. PeekPop is a Swift framework that brings backwards-compatibility to Peek and Pop.  
 
 <p align="center"><img src="http://i.giphy.com/3o7ablu0adICfQ3OXC.gif" width="242" height="425"/></p>
 
