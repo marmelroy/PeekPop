@@ -20,8 +20,8 @@ MODE="$1"
 if [ "$MODE" = "framework" ]; then
     echo "Building and testing PeekPop."
     xctool \
-        -project FileBrowser.xcodeproj \
-        -scheme FileBrowser \
+        -project PeekPop.xcodeproj \
+        -scheme PeekPop \
         -sdk "$SDK" \
         -destination "$PLATFORM" \
         build test
