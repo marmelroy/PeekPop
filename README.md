@@ -47,10 +47,19 @@ PeekPopPreviewingDelegate requires two simple functions. You will need to tell i
     func previewingContext(previewingContext: PreviewingContext, viewControllerForLocation location: CGPoint) -> UIViewController?
 ```
 
-.. and you will need to tell it how to commit the preview view controller at the end of the transition with: 
+...and you will need to tell it how to commit the preview view controller at the end of the transition with: 
 ```swift
     func previewingContext(previewingContext: PreviewingContext, commitViewController viewControllerToCommit: UIViewController)
 ```
+
+## How does it work? 
+
+In devices without 3D touch, PeekPop recognizes pressure on the screen by monitoring significant changes in UITouch's majorRadius value. It assumes that by pressing harder on your iPhone, more of the surface area of your finger is in contact with the screen. This is true in the majority of cases. 
+
+## Inspiration
+- (http://krakendev.io/peek-pop/)[http://krakendev.io/peek-pop/]
+- (http://flexmonkey.blogspot.fr/2015/10/the-plum-o-meter-weighing-plums-using.html)[http://flexmonkey.blogspot.fr/2015/10/the-plum-o-meter-weighing-plums-using.html]
+- (https://github.com/b3ll/Pseudo3DTouch)[https://github.com/b3ll/Pseudo3DTouch]
 
 ### Setting up with [CocoaPods](http://cocoapods.org/?q=PeekPop)
 ```ruby
