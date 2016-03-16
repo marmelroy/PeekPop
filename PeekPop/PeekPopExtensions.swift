@@ -12,6 +12,9 @@ extension UIView {
     
     func screenshotView(inHierarchy: Bool = true, rect: CGRect? = nil) -> UIImage? {
         UIGraphicsBeginImageContextWithOptions(self.layer.frame.size, false, UIScreen.mainScreen().scale);
+        defer{
+            UIGraphicsEndImageContext()
+        }
         if inHierarchy == true {
             self.drawViewHierarchyInRect(self.bounds, afterScreenUpdates: false)
         }
@@ -26,7 +29,6 @@ extension UIView {
             return UIImage(CGImage: croppedImageRef)
         }
         else {
-            UIGraphicsEndImageContext()
             return image
         }
     }
