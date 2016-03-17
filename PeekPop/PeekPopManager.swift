@@ -16,7 +16,12 @@ class PeekPopManager {
     var targetViewController: UIViewController?
     
     private var peekPopView: PeekPopView?
-    private var peekPopWindow: UIWindow?
+    private lazy var peekPopWindow: UIWindow = {
+        let window = UIWindow(frame: UIScreen.mainScreen().bounds)
+        window.windowLevel = UIWindowLevelAlert
+        window.rootViewController = UIViewController()
+        return window
+    }()
 
     init(peekPop: PeekPop) {
         self.peekPop = peekPop
@@ -74,28 +79,19 @@ class PeekPopManager {
     
     /// Add window to heirarchy when peek pop begins
     func peekPopBegan() {
-        
-        // Create window if it doesn't already exist
-        if peekPopWindow == nil {
-            let window = UIWindow(frame: UIScreen.mainScreen().bounds)
-            window.windowLevel = UIWindowLevelAlert
-            window.rootViewController = UIViewController()
-            peekPopWindow = window
-        }
-        
-        peekPopWindow?.alpha = 0.0
-        peekPopWindow?.hidden = false
-        peekPopWindow?.makeKeyAndVisible()
+        peekPopWindow.alpha = 0.0
+        peekPopWindow.hidden = false
+        peekPopWindow.makeKeyAndVisible()
         
         if let peekPopView = peekPopView {
-            peekPopWindow?.addSubview(peekPopView)
+            peekPopWindow.addSubview(peekPopView)
         }
         
         peekPopView?.frame = viewController.view.bounds
         peekPopView?.didAppear()
         
         UIView.animateWithDuration(0.2, animations: { () -> Void in
-            self.peekPopWindow?.alpha = 1.0
+            self.peekPopWindow.alpha = 1.0
         })
         
     }
@@ -130,10 +126,10 @@ class PeekPopManager {
      */
     func peekPopEnded() {
         UIView.animateWithDuration(0.2, animations: { () -> Void in
-            self.peekPopWindow?.alpha = 0.0
+            self.peekPopWindow.alpha = 0.0
             }) { (finished) -> Void in
                 self.peekPop.peekPopGestureRecognizer?.resetValues()
-                self.peekPopWindow?.hidden = true
+                self.peekPopWindow.hidden = true
                 self.peekPopView?.removeFromSuperview()
                 self.peekPopView = nil
         }
