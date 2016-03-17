@@ -2,7 +2,14 @@
 
 ## [Unreleased](https://github.com/marmelroy/PeekPop/tree/HEAD)
 
-[Full Changelog](https://github.com/marmelroy/PeekPop/compare/0.1...HEAD)
+[Full Changelog](https://github.com/marmelroy/PeekPop/compare/0.1.1...HEAD)
+
+**Closed issues:**
+
+- Updating via carthage didn't resolve the memory leak. [\#4](https://github.com/marmelroy/PeekPop/issues/4)
+
+## [0.1.1](https://github.com/marmelroy/PeekPop/tree/0.1.1) (2016-03-17)
+[Full Changelog](https://github.com/marmelroy/PeekPop/compare/0.1...0.1.1)
 
 **Closed issues:**
 
