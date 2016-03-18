@@ -18,6 +18,7 @@ class ImagesCollectionViewController: UICollectionViewController, UICollectionVi
     var images = [UIImage(named: "IMG_5441.JPG"), UIImage(named: "IMG_5311.JPG"), UIImage(named: "IMG_5291.JPG"), UIImage(named: "IMG_5290.JPG"), UIImage(named: "IMG_5155.JPG"), UIImage(named: "IMG_5153.JPG"), UIImage(named: "IMG_4976.JPG")]
     
     override func viewDidLoad() {
+        super.viewDidLoad()
         self.title = "InstaPreview"
         self.collectionView!.registerClass(ImageCollectionViewCell.self, forCellWithReuseIdentifier: reuseIdentifier)
         peekPop = PeekPop(viewController: self)
