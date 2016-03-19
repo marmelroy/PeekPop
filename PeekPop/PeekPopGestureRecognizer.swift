@@ -37,6 +37,19 @@ class PeekPopGestureRecognizer: UIGestureRecognizer
     
     //MARK: Touch handling
     
+     func handleSwipes(sender:UISwipeGestureRecognizer) {
+        
+        if(sender.direction == .Up){
+            
+            var inp = CGPointMake((self.view?.frame.origin.y)! + 20, (self.view?.frame.origin.x)!)
+            view?.frame = CGRectMake(inp.x, inp.y, (self.view?.frame.size.width)!, (self.view?.frame.size.height)!)
+            
+        }
+        
+        
+    }
+
+    
     override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent)
     {
         super.touchesBegan(touches, withEvent: event)
@@ -59,8 +72,41 @@ class PeekPopGestureRecognizer: UIGestureRecognizer
         if let touch = touches.first where peekPopStarted == true
         {
             testForceChange(touch.majorRadius)
+            var touchLoc = touch.locationInView(self.view)
+                var x = touchLoc.x
+                let y = touchLoc.y
+            var jm = UISwipeGestureRecognizer(target: self, action: Selector("handleSwipes:"))
+            jm.direction = .Up
+            view?.addGestureRecognizer(jm)
+            if (y == y+20 && jm.direction == .Up){
+                showact()
+               handleSwipes(jm)
+                
+
         }
     }
+    
+     
+    func showact(){
+        
+        let optionMenu = UIAlertController(title: nil, message: "Choose Option", preferredStyle: .ActionSheet)
+        
+        // 2
+        let deleteAction = UIAlertAction(title: "Delete", style: .Default, handler: {
+            (alert: UIAlertAction!) -> Void in
+            print("File Deleted")
+        })
+        let saveAction = UIAlertAction(title: "Save", style: .Default, handler: {
+            (alert: UIAlertAction!) -> Void in
+            print("File Saved")
+        })
+        
+        optionMenu.addAction(deleteAction)
+        optionMenu.addAction(saveAction)
+        
+        
+    }
+
     
     func delayedFirstTouch(touch: UITouch) {
         if isTouchValid(touch) {
