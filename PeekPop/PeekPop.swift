@@ -51,6 +51,7 @@ public class PeekPop: NSObject {
             gestureRecognizer.context = previewing
             gestureRecognizer.cancelsTouchesInView = false
             gestureRecognizer.delaysTouchesBegan = true
+            gestureRecognizer.delegate = self
             sourceView.addGestureRecognizer(gestureRecognizer)
             peekPopGestureRecognizer = gestureRecognizer
         }

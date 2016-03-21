@@ -35,6 +35,12 @@ extension UIView {
 
 }
 
+extension PeekPop: UIGestureRecognizerDelegate {
+    public func gestureRecognizer(gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWithGestureRecognizer otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+        return true
+    }
+}
+
 extension PreviewingContext: Equatable {}
 public func ==(lhs: PreviewingContext, rhs: PreviewingContext) -> Bool {
     return lhs.sourceView == rhs.sourceView

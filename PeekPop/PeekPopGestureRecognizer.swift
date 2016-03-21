@@ -110,7 +110,7 @@ class PeekPopGestureRecognizer: UIGestureRecognizer
     
     func isTouchValid(touch: UITouch) -> Bool {
         let sourceRect = context?.sourceView.frame ?? CGRect.zero
-        let touchLocation = touch.locationInView(self.view)
+        let touchLocation = touch.locationInView(self.view?.superview)
         return CGRectContainsPoint(sourceRect, touchLocation)
     }
     
