@@ -1,8 +1,8 @@
 #!/bin/bash
 
 # **** Update me when new Xcode versions are released! ****
-PLATFORM="platform=iOS Simulator,OS=9.2,name=iPhone 6"
-SDK="iphonesimulator9.2"
+PLATFORM="platform=iOS Simulator,OS=9.3,name=iPhone 6"
+SDK="iphonesimulator9.3"
 
 
 # It is pitch black.
@@ -19,7 +19,7 @@ MODE="$1"
 
 if [ "$MODE" = "framework" ]; then
     echo "Building and testing PeekPop."
-    xctool \
+    xcodebuild \
         -project PeekPop.xcodeproj \
         -scheme PeekPop \
         -sdk "$SDK" \
@@ -35,7 +35,7 @@ if [ "$MODE" = "examples" ]; then
     for example in examples/*/; do
         echo "Building $example."
         pod install --project-directory=$example
-        xctool \
+        xcodebuild \
             -workspace "${example}Sample.xcworkspace" \
             -scheme Sample \
             -sdk "$SDK" \
