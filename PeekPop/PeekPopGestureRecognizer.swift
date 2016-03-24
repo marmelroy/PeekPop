@@ -45,7 +45,7 @@ class PeekPopGestureRecognizer: UIGestureRecognizer
             let touchLocation = touch.locationInView(self.view)
             self.state = (context.delegate.previewingContext(context, viewControllerForLocation: touchLocation) != nil) ? .Possible : .Failed
             if self.state == .Possible {
-                self.performSelector("delayedFirstTouch:", withObject: touch, afterDelay: 0.2)
+                self.performSelector(#selector(delayedFirstTouch), withObject: touch, afterDelay: 0.2)
             }
         }
         else {
@@ -116,7 +116,7 @@ class PeekPopGestureRecognizer: UIGestureRecognizer
     
     func updateProgress() {
         displayLink?.invalidate()
-        displayLink = CADisplayLink(target: self, selector: "animateToTargetProgress")
+        displayLink = CADisplayLink(target: self, selector: #selector(animateToTargetProgress))
         displayLink?.addToRunLoop(NSRunLoop.mainRunLoop(), forMode: NSRunLoopCommonModes)
     }
     
