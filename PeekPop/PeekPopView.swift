@@ -28,6 +28,8 @@ class PeekPopView: UIView {
             blurredScreenshots.removeAll()
         }
     }
+    
+    var targetViewControllerView: UIView? = nil
     var targetViewControllerScreenshot: UIImage? = nil
     var sourceViewScreenshot: UIImage?
     var blurredScreenshots = [UIImage]()
@@ -85,6 +87,7 @@ class PeekPopView: UIView {
         targetPreviewView.frame.size = sourceViewRect.size
         targetPreviewView.imageViewFrame = self.bounds
         targetPreviewView.imageView.image = targetViewControllerScreenshot
+        targetPreviewView.viewControllerView = targetViewControllerView
    
         sourceImageView.frame = sourceViewRect
         sourceImageView.image = sourceViewScreenshot
@@ -151,6 +154,16 @@ class PeekPopTargetPreviewView: UIView {
     var imageContainer = UIImageView()
     var imageView = UIImageView()
     var imageViewFrame = CGRect.zero
+    
+    var viewControllerView: UIView? = nil{
+        willSet{
+            viewControllerView?.removeFromSuperview()
+        }
+        didSet{
+            imageContainer.insertSubview(viewControllerView!, belowSubview: imageView)
+            setNeedsLayout()
+        }
+    }
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -167,6 +180,8 @@ class PeekPopTargetPreviewView: UIView {
         imageContainer.frame = self.bounds
         imageView.frame = imageViewFrame
         imageView.center = CGPointMake(self.bounds.size.width/2, self.bounds.size.height/2)
+        viewControllerView?.frame = imageViewFrame
+        viewControllerView?.center = CGPointMake(self.bounds.size.width/2, self.bounds.size.height/2)
     }
     
     func setup() {

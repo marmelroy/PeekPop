@@ -54,7 +54,7 @@ class PeekPopManager {
 
         // Take target view controller screenshot
         targetVC.view.frame = viewController.view.bounds
-        peekPopView?.targetViewControllerScreenshot = targetVC.view.screenshotView(false)
+        peekPopView?.targetViewControllerView = targetVC.view
         targetViewController = targetVC
         
         return true
