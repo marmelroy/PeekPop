@@ -56,6 +56,9 @@ class PeekPopGestureRecognizer: UIGestureRecognizer
     override func touchesMoved(touches: Set<UITouch>, withEvent event: UIEvent)
     {
         super.touchesMoved(touches, withEvent: event)
+        if(self.state == .Possible){
+            self.cancelTouches()
+        }
         if let touch = touches.first where peekPopStarted == true
         {
             testForceChange(touch.majorRadius)
