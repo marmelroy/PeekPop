@@ -115,6 +115,7 @@ class PeekPopManager {
         guard let targetViewController = targetViewController, context = context else {
             return
         }
+        peekPopView?.targetViewControllerScreenshot = targetViewController.view.screenshotView(false)
         context.delegate.previewingContext(context, commitViewController: targetViewController)
         peekPopEnded()
     }

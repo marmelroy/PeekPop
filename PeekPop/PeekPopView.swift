@@ -30,7 +30,12 @@ class PeekPopView: UIView {
     }
     
     var targetViewControllerView: UIView? = nil
-    var targetViewControllerScreenshot: UIImage? = nil
+    var targetViewControllerScreenshot: UIImage? = nil{
+        didSet{
+            targetPreviewView.imageView.image = targetViewControllerScreenshot
+        }
+    }
+    
     var sourceViewScreenshot: UIImage?
     var blurredScreenshots = [UIImage]()
     
