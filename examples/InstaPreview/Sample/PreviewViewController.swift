@@ -10,7 +10,8 @@ import UIKit
 
 class PreviewViewController: UIViewController {
 
-    var imageView = UIImageView()
+    @IBOutlet weak var imageView: UIImageView!
+    @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     
     var image: UIImage? {
         didSet {
@@ -20,16 +21,11 @@ class PreviewViewController: UIViewController {
         }
     }
     
-    override func viewWillLayoutSubviews() {
-        super.viewWillLayoutSubviews()
-        imageView.frame = self.view.bounds
-    }
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.title = "Amsterdam"
         imageView.image = image
-        self.view.addSubview(imageView)
+        activityIndicator.startAnimating()
     }
 
 }
