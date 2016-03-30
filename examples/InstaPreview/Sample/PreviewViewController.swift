@@ -16,7 +16,7 @@ class PreviewViewController: UIViewController {
     var image: UIImage? {
         didSet {
             if let image = image {
-                imageView.image = image
+                imageView?.image = image
             }
         }
     }
