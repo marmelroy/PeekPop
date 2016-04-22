@@ -12,7 +12,6 @@ import Foundation
 public class PeekPop: NSObject {
     
     //MARK: Variables
-    private var previewingContexts = [PreviewingContext]()
     
     internal var viewController: UIViewController
     internal var peekPopGestureRecognizer: PeekPopGestureRecognizer?
@@ -38,7 +37,6 @@ public class PeekPop: NSObject {
     /// Registers a view controller to participate with 3D Touch preview (peek) and commit (pop).
     public func registerForPreviewingWithDelegate(delegate: PeekPopPreviewingDelegate, sourceView: UIView) -> PreviewingContext {
         let previewing = PreviewingContext(delegate: delegate, sourceView: sourceView)
-        previewingContexts.append(previewing)
         
         // If force touch is available, use Apple's implementation. Otherwise, use PeekPop's.
         if isForceTouchCapable() {
