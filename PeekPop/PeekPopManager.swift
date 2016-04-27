@@ -50,7 +50,7 @@ class PeekPopManager {
         // Take source view screenshot
         let rect = viewController.view.convertRect(context.sourceRect, fromView: context.sourceView)
         peekPopView?.sourceViewScreenshot = viewController.view.screenshotView(true, rect: rect)
-        peekPopView?.sourceViewRect = rect
+        peekPopView?.sourceViewRect = viewController.view.convertRect(rect, toView: nil)
 
         // Take target view controller screenshot
         targetVC.view.frame = viewController.view.bounds
@@ -87,7 +87,7 @@ class PeekPopManager {
             peekPopWindow.addSubview(peekPopView)
         }
         
-        peekPopView?.frame = viewController.view.bounds
+        peekPopView?.frame = UIScreen.mainScreen().bounds
         peekPopView?.didAppear()
         
         UIView.animateWithDuration(0.2, animations: { () -> Void in
