@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9532" systemVersion="15D21" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="bcI-18-A9e">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10116" systemVersion="15D21" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="bcI-18-A9e">
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9530"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
     </dependencies>
     <scenes>
         <!--Images Collection View Controller-->
@@ -56,17 +56,23 @@
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="hNB-TH-Mnu">
                                 <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                             </imageView>
+                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="DW0-xW-Q4G">
+                                <rect key="frame" x="282" y="281" width="37" height="37"/>
+                            </activityIndicatorView>
                         </subviews>
                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="hNB-TH-Mnu" firstAttribute="leading" secondItem="CxV-m9-HfW" secondAttribute="leading" id="0ha-nx-HHq"/>
                             <constraint firstItem="hNB-TH-Mnu" firstAttribute="top" secondItem="CxV-m9-HfW" secondAttribute="top" id="LIe-BR-05g"/>
                             <constraint firstItem="dvO-Mg-cii" firstAttribute="top" secondItem="hNB-TH-Mnu" secondAttribute="bottom" id="LXo-7C-1fz"/>
+                            <constraint firstItem="DW0-xW-Q4G" firstAttribute="centerY" secondItem="CxV-m9-HfW" secondAttribute="centerY" id="Xcd-6N-FCt"/>
+                            <constraint firstItem="DW0-xW-Q4G" firstAttribute="centerX" secondItem="CxV-m9-HfW" secondAttribute="centerX" id="rgt-i8-5hb"/>
                             <constraint firstAttribute="trailing" secondItem="hNB-TH-Mnu" secondAttribute="trailing" id="u43-bD-VVR"/>
                         </constraints>
                     </view>
                     <connections>
-                        <outlet property="imageView" destination="hNB-TH-Mnu" id="fLC-V4-vlT"/>
+                        <outlet property="activityIndicator" destination="DW0-xW-Q4G" id="eFv-Uk-eP9"/>
+                        <outlet property="imageView" destination="hNB-TH-Mnu" id="iL6-lZ-cW4"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="jSn-nB-KU8" userLabel="First Responder" sceneMemberID="firstResponder"/>
