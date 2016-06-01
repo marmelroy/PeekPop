@@ -18,7 +18,7 @@ public class PeekPop: NSObject {
     internal var peekPopGestureRecognizer: PeekPopGestureRecognizer?
     
     /// Fallback to Apple's peek and pop implementation for devices that support it.
-    private weak var forceTouchDelegate: ForceTouchDelegate?
+    private var forceTouchDelegate: ForceTouchDelegate?
     
     //MARK: Lifecycle
     
