@@ -33,7 +33,7 @@ class PeekPopManager {
     func peekPopPossible(context: PreviewingContext, touchLocation: CGPoint) -> Bool {
         
         // Return early if no target view controller is provided by delegate method
-        guard let targetVC = context.delegate.previewingContext(context, viewControllerForLocation: touchLocation) else {
+        guard let targetVC = context.delegate?.previewingContext(context, viewControllerForLocation: touchLocation) else {
             return false
         }
         
@@ -115,7 +115,7 @@ class PeekPopManager {
         guard let targetViewController = targetViewController, context = context else {
             return
         }
-        context.delegate.previewingContext(context, commitViewController: targetViewController)
+        context.delegate?.previewingContext(context, commitViewController: targetViewController)
         peekPopEnded()
     }
     

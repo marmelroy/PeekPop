@@ -43,7 +43,7 @@ class PeekPopGestureRecognizer: UIGestureRecognizer
         if let touch = touches.first, context = context where isTouchValid(touch)
         {
             let touchLocation = touch.locationInView(self.view)
-            self.state = (context.delegate.previewingContext(context, viewControllerForLocation: touchLocation) != nil) ? .Possible : .Failed
+            self.state = (context.delegate?.previewingContext(context, viewControllerForLocation: touchLocation) != nil) ? .Possible : .Failed
             if self.state == .Possible {
                 self.performSelector(#selector(delayedFirstTouch), withObject: touch, afterDelay: 0.2)
             }
