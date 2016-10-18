@@ -10,7 +10,7 @@ Sadly, almost 80% of iOS users are on older devices.
 
 PeekPop is a Swift framework that brings backwards-compatibility to Peek and Pop.  
 
-<p align="center"><img src="http://i.giphy.com/3o7ablu0adICfQ3OXC.gif" width="242" height="425"/></p>
+<p align="center"><img src="https://cloud.githubusercontent.com/assets/1930855/19472280/3a1e7eac-9559-11e6-93e3-ecc35e60699f.gif" width="242" height="425"/></p>
 
 ## Features
 
