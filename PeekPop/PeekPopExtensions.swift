@@ -10,23 +10,23 @@ import Foundation
 
 extension UIView {
     
-    func screenshotView(inHierarchy: Bool = true, rect: CGRect? = nil) -> UIImage? {
-        UIGraphicsBeginImageContextWithOptions(self.layer.frame.size, false, UIScreen.mainScreen().scale);
+    func screenshotView(_ inHierarchy: Bool = true, rect: CGRect? = nil) -> UIImage? {
+        UIGraphicsBeginImageContextWithOptions(self.layer.frame.size, false, UIScreen.main.scale);
         defer{
             UIGraphicsEndImageContext()
         }
         if inHierarchy == true {
-            self.drawViewHierarchyInRect(self.bounds, afterScreenUpdates: false)
+            self.drawHierarchy(in: self.bounds, afterScreenUpdates: false)
         }
         else {
             if let context = UIGraphicsGetCurrentContext() {
-                self.layer.renderInContext(context)
+                self.layer.render(in: context)
             }
         }
         let image = UIGraphicsGetImageFromCurrentImageContext()
-        let rectTransform = CGAffineTransformMakeScale(image.scale, image.scale)
-        if let rect = rect, let croppedImageRef = CGImageCreateWithImageInRect(image.CGImage, CGRectApplyAffineTransform(rect, rectTransform)) {
-            return UIImage(CGImage: croppedImageRef)
+        let rectTransform = CGAffineTransform(scaleX: (image?.scale)!, y: (image?.scale)!)
+        if let rect = rect, let croppedImageRef = image?.cgImage?.cropping(to: rect.applying(rectTransform)) {
+            return UIImage(cgImage: croppedImageRef)
         }
         else {
             return image
@@ -36,7 +36,7 @@ extension UIView {
 }
 
 extension PeekPop: UIGestureRecognizerDelegate {
-    public func gestureRecognizer(gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWithGestureRecognizer otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+    public func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
         return true
     }
 }

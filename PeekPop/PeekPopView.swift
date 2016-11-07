@@ -13,7 +13,7 @@ class PeekPopView: UIView {
     //MARK: Constants
     
     // These are 'magic' values
-    let targePreviewPadding = CGSizeMake(28, 140)
+    let targePreviewPadding = CGSize(width: 28, height: 140)
     
     var sourceViewCenter = CGPoint.zero
     var sourceToCenterXDelta: CGFloat = 0.0
@@ -89,7 +89,7 @@ class PeekPopView: UIView {
         sourceImageView.frame = sourceViewRect
         sourceImageView.image = sourceViewScreenshot
         
-        sourceViewCenter = CGPointMake(sourceViewRect.origin.x + sourceViewRect.size.width/2, sourceViewRect.origin.y + sourceViewRect.size.height/2)
+        sourceViewCenter = CGPoint(x: sourceViewRect.origin.x + sourceViewRect.size.width/2, y: sourceViewRect.origin.y + sourceViewRect.size.height/2)
         sourceToCenterXDelta = self.bounds.size.width/2 - sourceViewCenter.x
         sourceToCenterYDelta = self.bounds.size.height/2 - sourceViewCenter.y
         sourceToTargetWidthDelta = self.bounds.size.width - targePreviewPadding.width - sourceViewRect.size.width
@@ -97,7 +97,7 @@ class PeekPopView: UIView {
 
     }
     
-    func animateProgressiveBlur(progress: CGFloat) {
+    func animateProgressiveBlur(_ progress: CGFloat) {
         if blurredScreenshots.count > 2 {
             let blur = progress*CGFloat(blurredScreenshots.count - 1)
             let blurIndex = Int(blur)
@@ -109,10 +109,10 @@ class PeekPopView: UIView {
         }
     }
     
-    func animateProgress(progress: CGFloat) {
+    func animateProgress(_ progress: CGFloat) {
         
-        sourceImageView.hidden = progress > 0.33
-        targetPreviewView.hidden = progress < 0.33
+        sourceImageView.isHidden = progress > 0.33
+        targetPreviewView.isHidden = progress < 0.33
 
         // Source rect expand stage
         if progress < 0.33 {
@@ -120,21 +120,21 @@ class PeekPopView: UIView {
             animateProgressiveBlur(adjustedProgress)
             let adjustedScale: CGFloat = 1.0 - CGFloat(adjustedProgress)*0.015
             let adjustedSourceImageScale: CGFloat = 1.0 + CGFloat(adjustedProgress)*0.015
-            blurredImageViewFirst.transform = CGAffineTransformMakeScale(adjustedScale, adjustedScale)
-            blurredImageViewSecond.transform = CGAffineTransformMakeScale(adjustedScale, adjustedScale)
+            blurredImageViewFirst.transform = CGAffineTransform(scaleX: adjustedScale, y: adjustedScale)
+            blurredImageViewSecond.transform = CGAffineTransform(scaleX: adjustedScale, y: adjustedScale)
             overlayView.alpha = CGFloat(adjustedProgress)
-            sourceImageView.transform = CGAffineTransformMakeScale(adjustedSourceImageScale, adjustedSourceImageScale)
+            sourceImageView.transform = CGAffineTransform(scaleX: adjustedSourceImageScale, y: adjustedSourceImageScale)
         }
         // Target preview reveal stage
         else if progress < 0.45 {
             let targetAdjustedScale: CGFloat = min(CGFloat((progress - 0.33)/0.1), CGFloat(1.0))
-            targetPreviewView.frame.size = CGSizeMake(sourceViewRect.size.width + sourceToTargetWidthDelta*targetAdjustedScale, sourceViewRect.size.height + sourceToTargetHeightDelta*targetAdjustedScale)
-            targetPreviewView.center = CGPointMake(sourceViewCenter.x + sourceToCenterXDelta*targetAdjustedScale, sourceViewCenter.y + sourceToCenterYDelta*targetAdjustedScale)
+            targetPreviewView.frame.size = CGSize(width: sourceViewRect.size.width + sourceToTargetWidthDelta*targetAdjustedScale, height: sourceViewRect.size.height + sourceToTargetHeightDelta*targetAdjustedScale)
+            targetPreviewView.center = CGPoint(x: sourceViewCenter.x + sourceToCenterXDelta*targetAdjustedScale, y: sourceViewCenter.y + sourceToCenterYDelta*targetAdjustedScale)
         }
         // Target preview expand stage
         else if progress < 0.96 {
             let targetAdjustedScale = min(CGFloat(1 + (progress-0.66)/6),1.1)
-            targetPreviewView.transform = CGAffineTransformMakeScale(targetAdjustedScale, targetAdjustedScale)
+            targetPreviewView.transform = CGAffineTransform(scaleX: targetAdjustedScale, y: targetAdjustedScale)
         }
         // Commit target view controller
         else {
@@ -166,7 +166,7 @@ class PeekPopTargetPreviewView: UIView {
         super.layoutSubviews()
         imageContainer.frame = self.bounds
         imageView.frame = imageViewFrame
-        imageView.center = CGPointMake(self.bounds.size.width/2, self.bounds.size.height/2)
+        imageView.center = CGPoint(x: self.bounds.size.width/2, y: self.bounds.size.height/2)
     }
     
     func setup() {
