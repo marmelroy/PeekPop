@@ -17,9 +17,9 @@ class PeekPopTests: XCTestCase {
         let peekPopGestureRecognizer = PeekPopGestureRecognizer(peekPop: peekPop)
         peekPopGestureRecognizer.progress = 0.0
         peekPopGestureRecognizer.targetProgress = 1.0
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), {
+        DispatchQueue.global(priority: DispatchQueue.GlobalQueuePriority.default).async(execute: {
             sleep(2)
-            dispatch_sync(dispatch_get_main_queue(), {
+            DispatchQueue.main.sync(execute: {
                 XCTAssertEqual(peekPopGestureRecognizer.progress, 1.0)
             })
         })
@@ -31,9 +31,9 @@ class PeekPopTests: XCTestCase {
         let peekPopGestureRecognizer = PeekPopGestureRecognizer(peekPop: peekPop)
         peekPopGestureRecognizer.progress = 1.0
         peekPopGestureRecognizer.targetProgress = 0.0
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), {
+        DispatchQueue.global(priority: DispatchQueue.GlobalQueuePriority.default).async(execute: {
             sleep(2)
-            dispatch_sync(dispatch_get_main_queue(), {
+            DispatchQueue.main.sync(execute: {
                 XCTAssertEqual(peekPopGestureRecognizer.progress, 0.0)
             })
         })
