@@ -183,10 +183,11 @@ class PeekPopTargetPreviewView: UIView {
         imageContainer.frame = self.bounds
         imageView.frame = imageViewFrame
         imageView.center = CGPoint(x: self.bounds.size.width / 2, y: self.bounds.size.height / 2)
+
         viewControllerView?.frame = imageViewFrame
-        viewControllerView?.center = CGPoint(x: self.bounds.size.width / 2, y: self.bounds.size.height / 2)
+        viewControllerView?.center.x = (self.bounds.size.width / 2)
     }
-    
+
     func setup() {
         self.addSubview(imageContainer)
         imageContainer.layer.cornerRadius = 15
