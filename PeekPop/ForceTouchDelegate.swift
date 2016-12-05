@@ -17,13 +17,13 @@ class ForceTouchDelegate: NSObject, UIViewControllerPreviewingDelegate {
         self.delegate = delegate
     }
     
-    func registerFor3DTouch(sourceView: UIView, viewController: UIViewController) {
+    func registerFor3DTouch(_ sourceView: UIView, viewController: UIViewController) {
         if #available(iOS 9.0, *) {
-            viewController.registerForPreviewingWithDelegate(self, sourceView: sourceView)
+            viewController.registerForPreviewing(with: self, sourceView: sourceView)
         }
     }
     
-    @objc func previewingContext(previewingContext: UIViewControllerPreviewing, viewControllerForLocation location: CGPoint) -> UIViewController? {
+    @objc func previewingContext(_ previewingContext: UIViewControllerPreviewing, viewControllerForLocation location: CGPoint) -> UIViewController? {
         if #available(iOS 9.0, *) {
             if let delegate = delegate {
                 let context = PreviewingContext(delegate: delegate, sourceView: previewingContext.sourceView)
@@ -36,7 +36,7 @@ class ForceTouchDelegate: NSObject, UIViewControllerPreviewingDelegate {
         return nil
     }
     
-    @objc func previewingContext(previewingContext: UIViewControllerPreviewing, commitViewController viewControllerToCommit: UIViewController) {
+    @objc func previewingContext(_ previewingContext: UIViewControllerPreviewing, commit viewControllerToCommit: UIViewController) {
         if #available(iOS 9.0, *) {
             if let delegate = delegate {
                 let context = PreviewingContext(delegate: delegate, sourceView: previewingContext.sourceView)

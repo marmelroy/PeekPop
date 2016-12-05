@@ -37,40 +37,40 @@ class PeekPopGestureRecognizer: UIGestureRecognizer
     
     //MARK: Touch handling
     
-    override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent)
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent)
     {
-        super.touchesBegan(touches, withEvent: event)
-        if let touch = touches.first, context = context where isTouchValid(touch)
+        super.touchesBegan(touches, with: event)
+        if let touch = touches.first, let context = context, isTouchValid(touch)
         {
-            let touchLocation = touch.locationInView(self.view)
-            self.state = (context.delegate?.previewingContext(context, viewControllerForLocation: touchLocation) != nil) ? .Possible : .Failed
-            if self.state == .Possible {
-                self.performSelector(#selector(delayedFirstTouch), withObject: touch, afterDelay: 0.2)
+            let touchLocation = touch.location(in: self.view)
+            self.state = (context.delegate?.previewingContext(context, viewControllerForLocation: touchLocation) != nil) ? .possible : .failed
+            if self.state == .possible {
+                self.perform(#selector(delayedFirstTouch), with: touch, afterDelay: 0.2)
             }
         }
         else {
-            self.state = .Failed
+            self.state = .failed
         }
     }
     
-    override func touchesMoved(touches: Set<UITouch>, withEvent event: UIEvent)
+    override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent)
     {
-        super.touchesMoved(touches, withEvent: event)
-        if(self.state == .Possible){
+        super.touchesMoved(touches, with: event)
+        if(self.state == .possible){
             self.cancelTouches()
         }
-        if let touch = touches.first where peekPopStarted == true
+        if let touch = touches.first, peekPopStarted == true
         {
             testForceChange(touch.majorRadius)
         }
     }
     
-    func delayedFirstTouch(touch: UITouch) {
+    func delayedFirstTouch(_ touch: UITouch) {
         if isTouchValid(touch) {
-            self.state = .Began
+            self.state = .began
             if let context = context {
-                let touchLocation = touch.locationInView(self.view)
-                peekPopManager.peekPopPossible(context, touchLocation: touchLocation)
+                let touchLocation = touch.location(in: self.view)
+                _ = peekPopManager.peekPopPossible(context, touchLocation: touchLocation)
             }
             peekPopStarted = true
             initialMajorRadius = touch.majorRadius
@@ -79,48 +79,48 @@ class PeekPopGestureRecognizer: UIGestureRecognizer
         }
     }
     
-    func testForceChange(majorRadius: CGFloat) {
+    func testForceChange(_ majorRadius: CGFloat) {
         if initialMajorRadius/majorRadius < 0.6  {
             targetProgress = 0.99
         }
     }
     
-    override func touchesEnded(touches: Set<UITouch>, withEvent event: UIEvent)
+    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent)
     {
         self.cancelTouches()
-        super.touchesEnded(touches, withEvent: event)
+        super.touchesEnded(touches, with: event)
     }
     
-    override func touchesCancelled(touches: Set<UITouch>, withEvent event: UIEvent) {
+    override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent) {
         self.cancelTouches()
-        super.touchesCancelled(touches, withEvent: event)
+        super.touchesCancelled(touches, with: event)
     }
     
     func resetValues() {
-        NSObject.cancelPreviousPerformRequestsWithTarget(self)
+        NSObject.cancelPreviousPerformRequests(withTarget: self)
         peekPopStarted = false
         progress = 0.0
     }
     
-    private func cancelTouches() {
-        self.state = .Cancelled
+    fileprivate func cancelTouches() {
+        self.state = .cancelled
         peekPopStarted = false
-        NSObject.cancelPreviousPerformRequestsWithTarget(self)
+        NSObject.cancelPreviousPerformRequests(withTarget: self)
         if progress < commitThreshold {
             targetProgress = 0.0
         }
     }
     
-    func isTouchValid(touch: UITouch) -> Bool {
+    func isTouchValid(_ touch: UITouch) -> Bool {
         let sourceRect = context?.sourceView.frame ?? CGRect.zero
-        let touchLocation = touch.locationInView(self.view?.superview)
-        return CGRectContainsPoint(sourceRect, touchLocation)
+        let touchLocation = touch.location(in: self.view?.superview)
+        return sourceRect.contains(touchLocation)
     }
     
     func updateProgress() {
         displayLink?.invalidate()
         displayLink = CADisplayLink(target: self, selector: #selector(animateToTargetProgress))
-        displayLink?.addToRunLoop(NSRunLoop.mainRunLoop(), forMode: NSRunLoopCommonModes)
+        displayLink?.add(to: RunLoop.main, forMode: RunLoopMode.commonModes)
     }
     
     func animateToTargetProgress() {
