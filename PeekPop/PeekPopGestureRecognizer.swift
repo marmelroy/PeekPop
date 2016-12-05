@@ -70,7 +70,7 @@ class PeekPopGestureRecognizer: UIGestureRecognizer
             self.state = .began
             if let context = context {
                 let touchLocation = touch.location(in: self.view)
-                _ = peekPopManager.peekPopPossible(context, touchLocation: touchLocation)
+                peekPopManager.peekPopPossible(context, touchLocation: touchLocation)
             }
             peekPopStarted = true
             initialMajorRadius = touch.majorRadius

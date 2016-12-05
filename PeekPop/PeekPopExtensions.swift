@@ -25,7 +25,7 @@ extension UIView {
         }
         let image = UIGraphicsGetImageFromCurrentImageContext()
         let rectTransform = CGAffineTransform(scaleX: (image?.scale)!, y: (image?.scale)!)
-        if let rect = rect, let croppedImageRef = (image?.cgImage)?.cropping(to: rect.applying(rectTransform)) {
+        if let rect = rect, let croppedImageRef = image?.cgImage?.cropping(to: rect.applying(rectTransform)) {
             return UIImage(cgImage: croppedImageRef)
         }
         else {
