@@ -13,7 +13,7 @@ class PeekPopView: UIView {
     //MARK: Constants
     
     // These are 'magic' values
-    let targePreviewPadding = CGSizeMake(28, 140)
+    let targePreviewPadding = CGSizeMake(0, 88)
     
     var sourceViewCenter = CGPoint.zero
     var sourceToCenterXDelta: CGFloat = 0.0
@@ -83,7 +83,7 @@ class PeekPopView: UIView {
         overlayView.frame = self.bounds
         
         targetPreviewView.frame.size = sourceViewRect.size
-        targetPreviewView.imageViewFrame = self.bounds
+        targetPreviewView.imageViewFrame.size = CGSizeMake(self.bounds.size.width-targePreviewPadding.width, self.bounds.size.height-targePreviewPadding.height)
         targetPreviewView.imageView.image = targetViewControllerScreenshot
    
         sourceImageView.frame = sourceViewRect
@@ -133,12 +133,11 @@ class PeekPopView: UIView {
         }
         // Target preview expand stage
         else if progress < 0.96 {
-            let targetAdjustedScale = min(CGFloat(1 + (progress-0.66)/6),1.1)
+            let targetAdjustedScale = min(CGFloat(0.9 + (progress-0.5)/5),1.0)
             targetPreviewView.transform = CGAffineTransformMakeScale(targetAdjustedScale, targetAdjustedScale)
         }
         // Commit target view controller
         else {
-            targetPreviewView.frame = self.bounds
             targetPreviewView.imageContainer.layer.cornerRadius = 0
         }
 
