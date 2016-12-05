@@ -9,16 +9,16 @@
 import Foundation
 
 /// PeekPop class
-public class PeekPop: NSObject {
+open class PeekPop: NSObject {
     
     //MARK: Variables
-    private var previewingContexts = [PreviewingContext]()
+    fileprivate var previewingContexts = [PreviewingContext]()
     
     internal var viewController: UIViewController
     internal var peekPopGestureRecognizer: PeekPopGestureRecognizer?
     
     /// Fallback to Apple's peek and pop implementation for devices that support it.
-    private var forceTouchDelegate: ForceTouchDelegate?
+    fileprivate var forceTouchDelegate: ForceTouchDelegate?
     
     //MARK: Lifecycle
     
@@ -36,7 +36,7 @@ public class PeekPop: NSObject {
     //MARK: Delegate registration
     
     /// Registers a view controller to participate with 3D Touch preview (peek) and commit (pop).
-    public func registerForPreviewingWithDelegate(delegate: PeekPopPreviewingDelegate, sourceView: UIView) -> PreviewingContext {
+    open func registerForPreviewingWithDelegate(_ delegate: PeekPopPreviewingDelegate, sourceView: UIView) -> PreviewingContext {
         let previewing = PreviewingContext(delegate: delegate, sourceView: sourceView)
         previewingContexts.append(previewing)
         
@@ -62,7 +62,7 @@ public class PeekPop: NSObject {
     /// Check whether force touch is available
     func isForceTouchCapable() -> Bool {
         if #available(iOS 9.0, *) {
-            return (self.viewController.traitCollection.forceTouchCapability == UIForceTouchCapability.Available && TARGET_OS_SIMULATOR != 1)
+            return (self.viewController.traitCollection.forceTouchCapability == UIForceTouchCapability.available && TARGET_OS_SIMULATOR != 1)
         }
         return false
     }
@@ -70,13 +70,13 @@ public class PeekPop: NSObject {
 }
 
 /// Previewing context struct
-public class PreviewingContext {
+open class PreviewingContext {
     /// Previewing delegate
-    public weak var delegate: PeekPopPreviewingDelegate?
+    open weak var delegate: PeekPopPreviewingDelegate?
     /// Source view
-    public let sourceView: UIView
+    open let sourceView: UIView
     /// Source rect
-    public var sourceRect: CGRect
+    open var sourceRect: CGRect
     
     init(delegate: PeekPopPreviewingDelegate, sourceView: UIView) {
         self.delegate = delegate
@@ -90,9 +90,9 @@ public class PreviewingContext {
 public protocol PeekPopPreviewingDelegate: class {
     
     /// Provide view controller for previewing context in location. If you return nil, a preview presentation will not be performed.
-    func previewingContext(previewingContext: PreviewingContext, viewControllerForLocation location: CGPoint) -> UIViewController?
+    func previewingContext(_ previewingContext: PreviewingContext, viewControllerForLocation location: CGPoint) -> UIViewController?
     
     /// Commit view controller when preview is committed.
-    func previewingContext(previewingContext: PreviewingContext, commitViewController viewControllerToCommit: UIViewController)
+    func previewingContext(_ previewingContext: PreviewingContext, commitViewController viewControllerToCommit: UIViewController)
 }
 
