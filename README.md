@@ -6,7 +6,7 @@
 # PeekPop
 Peek and Pop is a great new iOS feature introduced with iPhone 6S and 6S+ that allows you to easily preview content using 3D touch.
 
-Sadly, almost 80% of iOS users are on older devices. 
+Sadly, almost 60% of iOS users are on older devices. 
 
 PeekPop is a Swift framework that brings backwards-compatibility to Peek and Pop.  
 
@@ -49,12 +49,12 @@ class MyViewController: UIViewController, PeekPopPreviewingDelegate {
 
 PeekPopPreviewingDelegate requires implementing two simple functions. You will need to tell it what view controller to present for peeking purposes with: 
 ```swift
-    func previewingContext(previewingContext: PreviewingContext, viewControllerForLocation location: CGPoint) -> UIViewController?
+    func previewingContext(_ previewingContext: PreviewingContext, viewControllerForLocation location: CGPoint) -> UIViewController?
 ```
 
 ...and you will need to tell it how to commit the preview view controller at the end of the transition with: 
 ```swift
-    func previewingContext(previewingContext: PreviewingContext, commitViewController viewControllerToCommit: UIViewController)
+    func previewingContext(_ previewingContext: PreviewingContext, commitViewController viewControllerToCommit: UIViewController)
 ```
 
 ## How does it work? 
@@ -66,7 +66,7 @@ It assumes that by pressing harder on your iPhone, more of the surface area of y
 ### Setting up with [CocoaPods](http://cocoapods.org/?q=PeekPop)
 ```ruby
 source 'https://github.com/CocoaPods/Specs.git'
-pod 'PeekPop', '~> 0.1'
+pod 'PeekPop', '~> 1.0'
 ```
 
 ### Setting up with Carthage
