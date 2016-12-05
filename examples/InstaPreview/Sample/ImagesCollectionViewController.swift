@@ -20,38 +20,38 @@ class ImagesCollectionViewController: UICollectionViewController, UICollectionVi
     override func viewDidLoad() {
         super.viewDidLoad()
         self.title = "InstaPreview"
-        self.collectionView!.registerClass(ImageCollectionViewCell.self, forCellWithReuseIdentifier: reuseIdentifier)
+        self.collectionView!.register(ImageCollectionViewCell.self, forCellWithReuseIdentifier: reuseIdentifier)
         peekPop = PeekPop(viewController: self)
         peekPop?.registerForPreviewingWithDelegate(self, sourceView: collectionView!)
     }
 
     // MARK: UICollectionView DataSource and Delegate
 
-    override func numberOfSectionsInCollectionView(collectionView: UICollectionView) -> Int {
+    override func numberOfSections(in collectionView: UICollectionView) -> Int {
         return 1
     }
 
 
-    override func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return images.count
     }
 
-    override func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCellWithReuseIdentifier(reuseIdentifier, forIndexPath: indexPath)
+    override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath)
         if let imageCell = cell as? ImageCollectionViewCell {
             imageCell.image = images[indexPath.item]
         }
         return cell
     }
     
-    func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let size = (self.view.bounds.size.width - 5*5)/4
-        return CGSizeMake(size, size)
+        return CGSize(width: size, height: size)
     }
     
-    override func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
+    override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let storyboard = UIStoryboard(name:"Main", bundle:nil)
-        if let previewViewController = storyboard.instantiateViewControllerWithIdentifier("PreviewViewController") as? PreviewViewController {
+        if let previewViewController = storyboard.instantiateViewController(withIdentifier: "PreviewViewController") as? PreviewViewController {
             self.navigationController?.pushViewController(previewViewController, animated: true)
             previewViewController.image = images[indexPath.item]
         }
@@ -60,12 +60,12 @@ class ImagesCollectionViewController: UICollectionViewController, UICollectionVi
     // MARK: PeekPopPreviewingDelegate
     
     
-    func previewingContext(previewingContext: PreviewingContext, viewControllerForLocation location: CGPoint) -> UIViewController? {
+    func previewingContext(_ previewingContext: PreviewingContext, viewControllerForLocation location: CGPoint) -> UIViewController? {
         let storyboard = UIStoryboard(name:"Main", bundle:nil)
-        if let previewViewController = storyboard.instantiateViewControllerWithIdentifier("PreviewViewController") as? PreviewViewController {
-            if let indexPath = collectionView!.indexPathForItemAtPoint(location) {
+        if let previewViewController = storyboard.instantiateViewController(withIdentifier: "PreviewViewController") as? PreviewViewController {
+            if let indexPath = collectionView!.indexPathForItem(at: location) {
                 let selectedImage = images[indexPath.item]
-                if let layoutAttributes = collectionView!.layoutAttributesForItemAtIndexPath(indexPath) {
+                if let layoutAttributes = collectionView!.layoutAttributesForItem(at: indexPath) {
                     previewingContext.sourceRect = layoutAttributes.frame
                 }
                 previewViewController.image = selectedImage
@@ -76,7 +76,7 @@ class ImagesCollectionViewController: UICollectionViewController, UICollectionVi
         return nil
     }
     
-    func previewingContext(previewingContext: PreviewingContext, commitViewController viewControllerToCommit: UIViewController) {
+    func previewingContext(_ previewingContext: PreviewingContext, commitViewController viewControllerToCommit: UIViewController) {
         self.navigationController?.pushViewController(viewControllerToCommit, animated: false)
     }
 
