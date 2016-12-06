@@ -76,7 +76,7 @@ class ImagesCollectionViewController: UICollectionViewController, UICollectionVi
         return nil
     }
     
-    func previewingContext(_ previewingContext: PreviewingContext, commitViewController viewControllerToCommit: UIViewController) {
+    func previewingContext(_ previewingContext: PreviewingContext, commit viewControllerToCommit: UIViewController) {
         self.navigationController?.pushViewController(viewControllerToCommit, animated: false)
     }
 
