@@ -103,7 +103,7 @@ class PeekPopManager {
      - parameter context:  PreviewingContext
      */
     func animateProgressForContext(_ progress: CGFloat, context: PreviewingContext?) {
-        (progress < 0.99) ? peekPopView?.animateProgress(progress) : commitTarget(context)
+        (progress < 0.5) ? peekPopView?.animateProgress(progress) : commitTarget(context)
     }
     
     /**
@@ -116,7 +116,7 @@ class PeekPopManager {
             return
         }
         peekPopView?.targetViewControllerScreenshot = targetViewController.view.screenshotView(false)
-        context.delegate?.previewingContext(context, commitViewController: targetViewController)
+        context.delegate?.previewingContext(context, commit: targetViewController)
         peekPopEnded()
     }
     

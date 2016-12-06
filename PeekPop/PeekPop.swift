@@ -93,6 +93,6 @@ public protocol PeekPopPreviewingDelegate: class {
     func previewingContext(_ previewingContext: PreviewingContext, viewControllerForLocation location: CGPoint) -> UIViewController?
     
     /// Commit view controller when preview is committed.
-    func previewingContext(_ previewingContext: PreviewingContext, commitViewController viewControllerToCommit: UIViewController)
+    func previewingContext(_ previewingContext: PreviewingContext, commit viewControllerToCommit: UIViewController)
 }
 

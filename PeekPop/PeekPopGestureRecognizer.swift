@@ -15,8 +15,8 @@ class PeekPopGestureRecognizer: UIGestureRecognizer
     let peekPopManager: PeekPopManager
 
     let interpolationSpeed: CGFloat = 0.02
-    let previewThreshold: CGFloat = 0.66
-    let commitThreshold: CGFloat = 0.99
+    let previewThreshold: CGFloat = 0.44
+    let commitThreshold: CGFloat = 0.5
 
     var progress: CGFloat = 0.0
     var targetProgress: CGFloat = 0.0 {
@@ -80,8 +80,8 @@ class PeekPopGestureRecognizer: UIGestureRecognizer
     }
 
     func testForceChange(_ majorRadius: CGFloat) {
-        if initialMajorRadius/majorRadius < 0.6  {
-            targetProgress = 0.99
+        if initialMajorRadius/majorRadius < 0.4  {
+            targetProgress = 0.5
         }
     }
 
