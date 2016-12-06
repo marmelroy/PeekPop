@@ -36,7 +36,7 @@ class PeekPopGestureRecognizer: UIGestureRecognizer
     }
 
     //MARK: Touch handling
-
+    
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent)
     {
         super.touchesBegan(touches, with: event)
@@ -52,7 +52,7 @@ class PeekPopGestureRecognizer: UIGestureRecognizer
             self.state = .failed
         }
     }
-
+    
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent)
     {
         super.touchesMoved(touches, with: event)
@@ -64,7 +64,7 @@ class PeekPopGestureRecognizer: UIGestureRecognizer
             testForceChange(touch.majorRadius)
         }
     }
-
+    
     func delayedFirstTouch(_ touch: UITouch) {
         if isTouchValid(touch) {
             self.state = .began
@@ -84,13 +84,13 @@ class PeekPopGestureRecognizer: UIGestureRecognizer
             targetProgress = 0.5
         }
     }
-
+    
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent)
     {
         self.cancelTouches()
         super.touchesEnded(touches, with: event)
     }
-
+    
     override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent) {
         self.cancelTouches()
         super.touchesCancelled(touches, with: event)
@@ -101,7 +101,7 @@ class PeekPopGestureRecognizer: UIGestureRecognizer
         peekPopStarted = false
         progress = 0.0
     }
-
+    
     fileprivate func cancelTouches() {
         self.state = .cancelled
         peekPopStarted = false
@@ -110,7 +110,7 @@ class PeekPopGestureRecognizer: UIGestureRecognizer
             targetProgress = 0.0
         }
     }
-
+    
     func isTouchValid(_ touch: UITouch) -> Bool {
         let sourceRect = context?.sourceView.frame ?? CGRect.zero
         let touchLocation = touch.location(in: self.view?.superview)

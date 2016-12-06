@@ -1,8 +1,8 @@
 #!/bin/bash
 
 # **** Update me when new Xcode versions are released! ****
-PLATFORM="platform=iOS Simulator,OS=9.3,name=iPhone 6"
-SDK="iphonesimulator9.3"
+PLATFORM="platform=iOS Simulator,OS=10.1,name=iPhone 7"
+SDK="iphonesimulator"
 
 
 # It is pitch black.
@@ -40,7 +40,7 @@ if [ "$MODE" = "examples" ]; then
             -scheme Sample \
             -sdk "$SDK" \
             -destination "$PLATFORM" \
-            build test
+            build
     done
     trap - EXIT
     exit 0

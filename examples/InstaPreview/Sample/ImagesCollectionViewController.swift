@@ -14,6 +14,8 @@ private let reuseIdentifier = "ImageCollectionViewCell"
 class ImagesCollectionViewController: UICollectionViewController, UICollectionViewDelegateFlowLayout, PeekPopPreviewingDelegate {
     
     var peekPop: PeekPop?
+
+    var previewingContext: PreviewingContext?
     
     var images = [UIImage(named: "IMG_5441.JPG"), UIImage(named: "IMG_5311.JPG"), UIImage(named: "IMG_5291.JPG"), UIImage(named: "IMG_5290.JPG"), UIImage(named: "IMG_5155.JPG"), UIImage(named: "IMG_5153.JPG"), UIImage(named: "IMG_4976.JPG")]
     
@@ -22,7 +24,7 @@ class ImagesCollectionViewController: UICollectionViewController, UICollectionVi
         self.title = "InstaPreview"
         self.collectionView!.register(ImageCollectionViewCell.self, forCellWithReuseIdentifier: reuseIdentifier)
         peekPop = PeekPop(viewController: self)
-        peekPop?.registerForPreviewingWithDelegate(self, sourceView: collectionView!)
+        previewingContext = peekPop?.registerForPreviewingWithDelegate(self, sourceView: collectionView!)
     }
 
     // MARK: UICollectionView DataSource and Delegate
