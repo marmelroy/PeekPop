@@ -10,31 +10,31 @@ import UIKit.UIGestureRecognizerSubclass
 
 class PeekPopGestureRecognizer: UIGestureRecognizer
 {
-    
+
     var context: PreviewingContext?
     let peekPopManager: PeekPopManager
-    
+
     let interpolationSpeed: CGFloat = 0.02
-    let previewThreshold: CGFloat = 0.66
-    let commitThreshold: CGFloat = 0.99
-    
+    let previewThreshold: CGFloat = 0.44
+    let commitThreshold: CGFloat = 0.5
+
     var progress: CGFloat = 0.0
     var targetProgress: CGFloat = 0.0 {
         didSet { updateProgress() }
     }
-    
+
     var initialMajorRadius: CGFloat = 0.0
     var displayLink: CADisplayLink?
-    
+
     var peekPopStarted = false
-    
+
     //MARK: Lifecycle
-    
+
     init(peekPop: PeekPop) {
         self.peekPopManager = PeekPopManager(peekPop: peekPop)
         super.init(target: nil, action: nil)
     }
-    
+
     //MARK: Touch handling
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent)
@@ -78,10 +78,10 @@ class PeekPopGestureRecognizer: UIGestureRecognizer
             targetProgress = previewThreshold
         }
     }
-    
+
     func testForceChange(_ majorRadius: CGFloat) {
-        if initialMajorRadius/majorRadius < 0.6  {
-            targetProgress = 0.99
+        if initialMajorRadius/majorRadius < 0.4  {
+            targetProgress = 0.5
         }
     }
     
@@ -95,7 +95,7 @@ class PeekPopGestureRecognizer: UIGestureRecognizer
         self.cancelTouches()
         super.touchesCancelled(touches, with: event)
     }
-    
+
     func resetValues() {
         NSObject.cancelPreviousPerformRequests(withTarget: self)
         peekPopStarted = false
@@ -116,13 +116,13 @@ class PeekPopGestureRecognizer: UIGestureRecognizer
         let touchLocation = touch.location(in: self.view?.superview)
         return sourceRect.contains(touchLocation)
     }
-    
+
     func updateProgress() {
         displayLink?.invalidate()
         displayLink = CADisplayLink(target: self, selector: #selector(animateToTargetProgress))
         displayLink?.add(to: RunLoop.main, forMode: RunLoopMode.commonModes)
     }
-    
+
     func animateToTargetProgress() {
         if progress < targetProgress {
             progress = min(progress + interpolationSpeed, targetProgress)
@@ -140,5 +140,5 @@ class PeekPopGestureRecognizer: UIGestureRecognizer
         }
         peekPopManager.animateProgressForContext(progress, context: context)
     }
-    
+
 }

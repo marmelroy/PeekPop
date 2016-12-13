@@ -42,7 +42,9 @@ class PeekPopManager {
         peekPopView = view
         
         // Take view controller screenshot
-        if let viewControllerScreenshot = viewController.view.screenshotView() {
+        let viewForScreenshot = UIApplication.shared.keyWindow ?? context.sourceView
+        
+        if let viewControllerScreenshot = viewForScreenshot.screenshotView() {
             peekPopView?.viewControllerScreenshot = viewControllerScreenshot
             peekPopView?.blurredScreenshots = self.generateBlurredScreenshots(viewControllerScreenshot)
         }
@@ -54,7 +56,7 @@ class PeekPopManager {
 
         // Take target view controller screenshot
         targetVC.view.frame = viewController.view.bounds
-        peekPopView?.targetViewControllerScreenshot = targetVC.view.screenshotView(false)
+        peekPopView?.targetViewControllerView = targetVC.view
         targetViewController = targetVC
         
         return true
@@ -103,7 +105,7 @@ class PeekPopManager {
      - parameter context:  PreviewingContext
      */
     func animateProgressForContext(_ progress: CGFloat, context: PreviewingContext?) {
-        (progress < 0.99) ? peekPopView?.animateProgress(progress) : commitTarget(context)
+        (progress < 0.5) ? peekPopView?.animateProgress(progress) : commitTarget(context)
     }
     
     /**
@@ -115,7 +117,8 @@ class PeekPopManager {
         guard let targetViewController = targetViewController, let context = context else {
             return
         }
-        context.delegate?.previewingContext(context, commitViewController: targetViewController)
+        peekPopView?.targetViewControllerScreenshot = targetViewController.view.screenshotView(false)
+        context.delegate?.previewingContext(context, commit: targetViewController)
         peekPopEnded()
     }
     

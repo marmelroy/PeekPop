@@ -10,7 +10,7 @@ import XCTest
 @testable import PeekPop
 
 class PeekPopTests: XCTestCase {
-    
+
     func testGestureRecognizerProgressIncreases() {
         let fakeViewController = UIViewController()
         let peekPop = PeekPop(viewController: fakeViewController)
@@ -24,7 +24,7 @@ class PeekPopTests: XCTestCase {
             })
         })
     }
-    
+
     func testGestureRecognizerProgressDecrease() {
         let fakeViewController = UIViewController()
         let peekPop = PeekPop(viewController: fakeViewController)
@@ -39,6 +39,5 @@ class PeekPopTests: XCTestCase {
         })
     }
 
-    
-    
+
 }

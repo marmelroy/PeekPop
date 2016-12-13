@@ -40,7 +40,7 @@ class ForceTouchDelegate: NSObject, UIViewControllerPreviewingDelegate {
         if #available(iOS 9.0, *) {
             if let delegate = delegate {
                 let context = PreviewingContext(delegate: delegate, sourceView: previewingContext.sourceView)
-                delegate.previewingContext(context, commitViewController: viewControllerToCommit)
+                delegate.previewingContext(context, commit: viewControllerToCommit)
             }
         }
     }
