@@ -42,7 +42,9 @@ class PeekPopManager {
         peekPopView = view
         
         // Take view controller screenshot
-        if let viewControllerScreenshot = viewController.view.screenshotView() {
+        let viewForScreenshot = UIApplication.shared.keyWindow ?? context.sourceView
+        
+        if let viewControllerScreenshot = viewForScreenshot.screenshotView() {
             peekPopView?.viewControllerScreenshot = viewControllerScreenshot
             peekPopView?.blurredScreenshots = self.generateBlurredScreenshots(viewControllerScreenshot)
         }
