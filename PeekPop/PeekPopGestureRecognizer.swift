@@ -65,7 +65,7 @@ class PeekPopGestureRecognizer: UIGestureRecognizer
         }
     }
     
-    func delayedFirstTouch(_ touch: UITouch) {
+    @objc func delayedFirstTouch(_ touch: UITouch) {
         if isTouchValid(touch) {
             self.state = .began
             if let context = context {
@@ -123,7 +123,7 @@ class PeekPopGestureRecognizer: UIGestureRecognizer
         displayLink?.add(to: RunLoop.main, forMode: RunLoopMode.commonModes)
     }
     
-    func animateToTargetProgress() {
+    @objc func animateToTargetProgress() {
         if progress < targetProgress {
             progress = min(progress + interpolationSpeed, targetProgress)
             if progress >= targetProgress {
